@@ -3,108 +3,107 @@ package engine;
 
 import java.io.PrintStream;
 
-class ISU {
+import engine.Grid.Dimension;
+
+public class ISU {
 
 	// FIELDS
-
 	Axis xAxis, yAxis;
 	ISU isu;
 	Grid grid;
 
 	// CONSTRUCTOR
-
 	ISU(Game game) {
-		throw new UnsupportedOperationException("Unimplemented method");
+		this.xAxis = new Axis(game.torusOnXaxis, game.width_ncell * game.cmPerCell);
+		this.yAxis = new Axis(game.torusOnYaxis, game.height_ncell * game.cmPerCell);
 	}
 
 	// SETTER
-
 	void set(Grid grid) {
-		throw new UnsupportedOperationException("Unimplemented method");
+		this.grid = grid;
 	}
 
 	// == DIMENSION (cm) ==
-
-	class Dimension {
+	public class Dimension {
 		double x_cm, y_cm;
 
 		// CONSTRUCTOR
-
 		Dimension(double x_cm, double y_cm) {
-			throw new UnsupportedOperationException("Unimplemented method");
+			this.x_cm = x_cm;
+			this.y_cm = y_cm;
 		}
 
 		// GEOMETRY
-
 		void normalize() {
-			throw new UnsupportedOperationException("Unimplemented method");
+			this.x_cm = xAxis.normalize(this.x_cm);
+			this.y_cm = yAxis.normalize(this.y_cm);
 		}
 
 		// SETTER
 
 		void setxy(double x_cm, double y_cm) {
-			throw new UnsupportedOperationException("Unimplemented method");
+			this.x_cm = x_cm;
+			this.y_cm = y_cm;
 		}
 
 		// GETTER
-
 		ISU isu() {
-			return null;
+			return ISU.this;
 		}
 
 		// EQUALS / EQUIV
 		public boolean equals(Object o) {
+			if (this == o)
+				return true;
+			if (o instanceof Dimension)
+				return this.x_cm == ((Dimension) o).x_cm && this.y_cm == ((Dimension) o).y_cm;
 			return false;
 		}
 
 		boolean equiv(Dimension d) {
-			return false;
+			if (d == null)
+				return false;
+			return xAxis.normalize(this.x_cm) == xAxis.normalize(d.x_cm) && yAxis.normalize(this.y_cm) == yAxis.normalize(d.y_cm);
 		}
 
 		// GETTER
-
 		double x() {
-			return 0.0;
+			return x_cm;
 		}
 
 		double y() {
-			return 0.0;
+			return y_cm;
 		}
 
 		// FACTORY
-
 		ISU.Vector mkScaledVector(double factor) {
-			return null;
+			return ISU.this.new Vector(this.x_cm * factor, this.y_cm * factor);
 		}
 
 		ISU.Vector mkScaledVector(double xFactor, double yFactor) {
-			return null;
+			return ISU.this.new Vector(this.x_cm * xFactor, this.y_cm * yFactor);
 		}
 
 		ISU.Vector mkVector() {
-			return null;
+			return ISU.this.new Vector(this.x_cm, this.y_cm);
 		}
 
 		// SHOW
-
 		void show(PrintStream ps) {
-			throw new UnsupportedOperationException("Unimplemented method");
+			ps.printf("ISUDim(%.2fcm, %.2fcm)", this.x_cm, this.y_cm);
 		}
 
 	}
 
 	// == POINT ==
-
-	class Coord {
+	public class Coord {
 
 		// CONSTRUCTOR
-
 		Coord(double x_cm, double y_cm) {
 			throw new UnsupportedOperationException("Unimplemented method");
 		}
 
 		// SHOW
-
 		void show(PrintStream ps) {
 			throw new UnsupportedOperationException("Unimplemented method");
 		}
@@ -115,19 +114,16 @@ class ISU {
 		}
 
 		// FACTORY
-
 		ISU.Vector mkVectorToward(Coord target) {
 			return null;
 		}
 
 		// CONVERSION
-
 		Grid.Position toGridPosition() {
 			return null;
 		}
 
 		// TRANSLATION
-
 		void translate(ISU.Vector v) {
 			throw new UnsupportedOperationException("Unimplemented method");
 		}
@@ -137,13 +133,11 @@ class ISU {
 		}
 
 		// COPY
-
 		ISU.Coord mkCopy() {
 			return null;
 		}
 
 		// ROTATION
-
 		/**
 		 * @apiNote rotation around the origin (0,0)
 		 * @param angle_degree
@@ -162,7 +156,6 @@ class ISU {
 		}
 
 		// DISTANCE
-
 		double distanceTo(Coord pt) {
 			return 0.0;
 		}
@@ -170,22 +163,19 @@ class ISU {
 	}
 
 	// == VECTOR ==
-
 	/**
 	 * @apiNote The Vector class defines canonical vectors with origin in (0,0)
 	 *          poiting at a target coordinate.
 	 * @apiNote Canonocal vectors are defined by their target Coord.
 	 */
-	class Vector {
+	public class Vector {
 
 		// CONSTRUCTOR
-
 		Vector(double targetX_cm, double targetY_cm) {
 			throw new UnsupportedOperationException("Unimplemented method");
 		}
 
 		// OPERATOR
-
 		void add(Vector v) {
 			throw new UnsupportedOperationException("Unimplemented method");
 		}
@@ -219,7 +209,6 @@ class ISU {
 		}
 
 		// TURN
-
 		/**
 		 * @apiNote turn the vector itself
 		 * @implNote the center of the rotation is the origin of the vector

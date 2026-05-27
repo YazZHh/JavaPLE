@@ -10,30 +10,25 @@ import engine.ISU.Vector;
 class Entity {
 
 	// FIELDS
-
 	Grid grid;
 	ISU isu;
 	String name;
 
 	// FIELDS
-
 	ISU.Dimension size; // dimension de l'entité
 	ISU.Dimension step; // dimension d'un pas de déplacement
 	Grid.Position position; // position dans la grille
 	ISU.Coord center; // coordonnées en cm du centre de l'entité
 
 	// FIELDS
-
 	int orientation_degree; // orientation par rapport à l'axe des x
 
 	// CONSTRUCTOR
-
 	Entity(String name) {
 		throw new UnsupportedOperationException("Unimplemented method");
 	}
 
 	// SETTER
-
 	void setPosition(Grid.Position position) {
 		throw new UnsupportedOperationException("Unimplemented method");
 	}
@@ -51,7 +46,6 @@ class Entity {
 	}
 
 	// GETTER
-
 	ISU.Coord center() {
 		return null;
 	}
@@ -65,7 +59,6 @@ class Entity {
 	}
 
 	// TRANSLATION
-
 	void translate(Grid.Vector v) {
 		throw new UnsupportedOperationException("Unimplemented method");
 	}
@@ -75,7 +68,6 @@ class Entity {
 	}
 
 	// TURN
-
 	/**
 	 * @apiNote turn is a rotation around the center of the entity.
 	 * @param angle_degree
@@ -85,13 +77,11 @@ class Entity {
 	}
 
 	// SHOW
-
 	void show(PrintStream ps) {
 		throw new UnsupportedOperationException("Unimplemented method");
 	}
 
 	// === MOVE ===
-
 	/**
 	 * @apiNote déplacement vers le nord en nombre de pas
 	 * @param nStep

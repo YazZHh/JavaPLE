@@ -6,8 +6,8 @@ import engine.Game;
 public class Main {
 
 	void main(String args[]) {
-		PacMan pm;
-		pm.game();
+		Game g = new Game(20, 20);
+		
 		
 	}
 

@@ -10,7 +10,6 @@ import engine.ISU.Dimension;
 public class Grid {
 
 	// FIELDS
-
 	ISU isu;
 	Axis xAxis, yAxis;
 	int width_ncell, height_ncell;
@@ -18,7 +17,6 @@ public class Grid {
 	Game game;
 
 	// CONSTRUCTOR
-
 	Grid(Game game) {
 		this.game = game;
 		this.width_ncell = game.width_ncell;
@@ -30,7 +28,6 @@ public class Grid {
 	}
 
 	// INIT
-
 	void init() {
 		for (int i=0; i<width_ncell; i++) {
 			for (int j=0; j<height_ncell; j++) {
@@ -40,7 +37,6 @@ public class Grid {
 	}
 
 	// GETTER
-
 	int width() {
 		return this.width_ncell;
 	}
@@ -54,25 +50,21 @@ public class Grid {
 	}
 
 	// SHOW
-
 	void show(PrintStream ps) {
 		ps.printf("Grid: %dx%d cells\n", this.width_ncell, this.height_ncell);
 	}
 
 	// == DIMENSION (nb cell) ==
-
 	public class Dimension {
 		int x_ncell, y_ncell;
 
 		// CONSTRUCTOR
-
 		Dimension(int x_ncell, int y_ncell) {
 			this.x_ncell = x_ncell;
 			this.y_ncell = y_ncell;
 		}
 
 		// GETTER
-
 		int x() {
 			return x_ncell;
 		}
@@ -82,13 +74,13 @@ public class Grid {
 		}
 
 		// GEOMETRY
-
 		void normalize() {
 			this.x_ncell = xAxis.normalize(this.x_ncell);
 			this.y_ncell = yAxis.normalize(this.y_ncell);
 		}
 
 		// EQUALS / EQUIV
+		@Override
 		public boolean equals(Object o) {
 			if (this == o)
 				return true;
@@ -104,7 +96,6 @@ public class Grid {
 		}
 
 		// CONVERSION
-
 		ISU.Dimension toISUDimension() {
 			double w_cm = this.x_ncell * game.cmPerCell;
 			double h_cm = this.y_ncell * game.cmPerCell;
@@ -120,26 +111,22 @@ public class Grid {
 	}
 
 	// == VECTOR ==
-
 	public class Vector {
 		int dy, dx;
 		
 		// CONSTRUCTOR
-
 		Vector(int x_ncell, int y_ncell) {
 			this.dx = x_ncell;
 			this.dy = y_ncell;
 		}
 
 		// OPERATION
-
 		void add(Vector v) {
 			this.dx += v.dx;
 		    this.dy += v.dy;
 		}
 
 		// SHOW
-
 		void show(PrintStream ps) {
 			ps.printf("Vec_ncell(%d,%d)", this.dx, this.dy);
 		}
@@ -147,30 +134,27 @@ public class Grid {
 	}
 
 	// == POINT ==
-
 	public class Position {
 		int x, y;
 
 		// CONSTRUCTOR
-
 		Position(int x_ncell, int y_ncell) {
 			this.x = xAxis.normalize(x_ncell);
 			this.y = yAxis.normalize(y_ncell);
 		}
 
 		// COPY ? if needed
-
 		Grid.Position copy() {
 			return new Position(x, y);
 		}
 
 		// EQUALS
+		@Override
 		public boolean equals(Object o) {
 			return (o instanceof Position && ((Position) o).x == this.x && ((Position) o).y == this.y);
 		}
 
 		// TRANSLATION
-
 		void translate(Vector v) {
 			this.x = xAxis.normalize(this.x + v.dx);
 			this.y = yAxis.normalize(this.y + v.dy);
@@ -181,7 +165,6 @@ public class Grid {
 		}
 
 		// ROTATION ? if needed
-
 		void rotateAround(Grid.Position position, int angle_degree) {
 			int dx = this.x - position.x;
 			int dy = this.y - position.y;
@@ -192,7 +175,6 @@ public class Grid {
 		}
 
 		// DISTANCE
-
 		double distanceTo(Position p) {
 			double dx = xAxis.distance(this.x, p.x);
 			double dy = yAxis.distance(this.y, p.y);
@@ -200,7 +182,6 @@ public class Grid {
 		}
 
 		// CONVERSION
-
 		ISU.Coord toISUCoord() {
 			double x_cm = this.x * game.cmPerCell;
 			double y_cm = this.y * game.cmPerCell;
@@ -218,7 +199,6 @@ public class Grid {
 //		}
 
 		// SHOW
-
 		void show(PrintStream ps) {
 			ps.printf("Pos_ncell(%d,%d)", this.x, this.y);
 		}
@@ -226,7 +206,6 @@ public class Grid {
 	}
 
 	// === CELL ===
-
 	public class Cell {
 
 		Grid.Dimension size;
@@ -237,28 +216,32 @@ public class Grid {
 
 		Cell(Position p) {
 			this.position = p;
+			this.size = new Dimension(1, 1);
+			this.entities = new java.util.ArrayList<Entity>();
 		}
 
 		// ADD
-
 		void add(Entity e) {
-			this.entities.add(e);
+			if (this.entities != null && !this.entities.contains(e)) {
+				this.entities.add(e);
+			}
 		}
 
 		// REMOVE
-
 		void remove(Entity e) {
-			this.entities.remove(e);
+			if (this.entities != null) {
+				this.entities.remove(e);
+			}
 		}
 
 		// PREDICATE
-
 		boolean contains(Entity e) {
+			if (this.entities == null)
+				return false;
 			return this.entities.contains(e);
 		}
 
 		// SHOW
-
 		void show(PrintStream ps) {
 			if (this.entities != null)
 				ps.printf("Cell at (%d,%d) containing %d entities\n", this.position.x, this.position.y, this.entities.size());
