@@ -151,7 +151,11 @@ public class Grid {
 		// EQUALS
 		@Override
 		public boolean equals(Object o) {
-			return (o instanceof Position && ((Position) o).x == this.x && ((Position) o).y == this.y);
+			if (this == o)
+				return true;
+			if (o instanceof Position)
+				return ((Position) o).x == this.x && ((Position) o).y == this.y;
+			return false;
 		}
 
 		// TRANSLATION
