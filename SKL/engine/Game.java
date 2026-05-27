@@ -23,7 +23,7 @@ public abstract class Game {
 
 	// CONSTRUCTORS
 
-	Game(int w_ncell, int h_ncell) {
+	public Game(int w_ncell, int h_ncell) {
 		if (game != null)
 			throw new IllegalStateException();
 		if (w_ncell <= 0 || h_ncell <= 0)
@@ -38,7 +38,7 @@ public abstract class Game {
 		this.isu = new ISU(this);
 	}
 
-	Game(double w_cm, double h_cm) {
+	public Game(double w_cm, double h_cm) {
 		if (game != null)
 			throw new IllegalStateException();
 		if (w_cm <= 0 || h_cm <= 0)

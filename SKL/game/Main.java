@@ -1,10 +1,14 @@
 // == MAIN ==
 package game;
 
-class Main {
+import engine.Game;
+
+public class Main {
 
 	void main(String args[]) {
-		throw new UnsupportedOperationException("Unimplemented method");
+		PacMan pm;
+		pm.game();
+		
 	}
 
 }
