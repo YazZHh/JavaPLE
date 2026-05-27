@@ -167,6 +167,18 @@ public class Grid {
 		void moveNorth(int n_ncell) {
 			this.y = yAxis.normalize(this.y - n_ncell);
 		}
+		
+		void moveSouth(int n_ncell) {
+			this.y = yAxis.normalize(this.y + n_ncell);
+		}
+
+		void moveEast(int n_ncell) {
+			this.x = xAxis.normalize(this.x + n_ncell);
+		}
+		
+		void moveWest(int n_ncell) {
+			this.x = xAxis.normalize(this.x - n_ncell);
+		}
 
 		// ROTATION ? if needed
 		void rotateAround(Grid.Position position, int angle_degree) {
