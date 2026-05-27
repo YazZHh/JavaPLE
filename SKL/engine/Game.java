@@ -26,9 +26,10 @@ public abstract class Game {
 	Game(int w_ncell, int h_ncell) {
 		if (game != null)
 			throw new IllegalStateException();
-		game = this;
+		if (w_ncell <= 0 || h_ncell <= 0)
+			throw new IllegalArgumentException();
 		
-		assert(w_ncell > 0 && h_ncell > 0);
+		game = this;
 		this.width_ncell = w_ncell;
 		this.height_ncell = h_ncell;
 		this.width_cm = w_ncell * this.cmPerCell;
@@ -40,11 +41,12 @@ public abstract class Game {
 	Game(double w_cm, double h_cm) {
 		if (game != null)
 			throw new IllegalStateException();
-		game = this;
+		if (w_cm <= 0 || h_cm <= 0)
+			throw new IllegalArgumentException();
 		
-		assert(w_cm > 0 && h_cm > 0);
-		this.width_ncell = (int) (w_cm / this.cmPerCell);
-		this.height_ncell = (int) (h_cm / this.cmPerCell);
+		game = this;
+		this.width_ncell = (int) Math.round(w_cm / this.cmPerCell);
+		this.height_ncell = (int) Math.round(h_cm / this.cmPerCell);
 		this.width_cm = w_cm;
 		this.height_cm = h_cm;
 		this.grid = new Grid(this);
