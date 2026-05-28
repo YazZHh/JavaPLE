@@ -6,18 +6,18 @@ import java.io.PrintStream;
 public class Game {
 
 	// CONSTANT
-	boolean torusOnXaxis = true; // vrai si l'axe X est une boucle fermée
-	boolean torusOnYaxis = true; // vrai si l'axe Y est une boucle fermée
-	double cmPerCell = 3.7; // échelle qui relie l'unité ncell à cm
-	int pixelPerCm = 2; // échelle qui relie l'unité pixel à cm
+	public final boolean torusOnXaxis = true; // vrai si l'axe X est une boucle fermée
+	public final boolean torusOnYaxis = true; // vrai si l'axe Y est une boucle fermée
+	public final double cmPerCell = 3.7; // échelle qui relie l'unité ncell à cm
+	public final int pixelPerCm = 2; // échelle qui relie l'unité pixel à cm
 
 	// FIELDS
-	int width_ncell; // largeur du monde en nombre de cellules
-	int height_ncell; // hauteur du monde en nombre de celluls
+	public int width_ncell; // largeur du monde en nombre de cellules
+	public int height_ncell; // hauteur du monde en nombre de celluls
 	double width_cm; // largeur du monde en cm
 	double height_cm; // hauteur du monde en cm
-	Grid grid; // permet la création de coordonnées en unités ncell
-	ISU isu; // permet la création de coordonnées en unités cm
+	public Grid grid; // permet la création de coordonnées en unités ncell
+	public ISU isu; // permet la création de coordonnées en unités cm
 	// protected Picture pict; // permet la création de coordonnées en unités pixel, ne sera utilisé qu'à
 					// partir de Task2
 
@@ -61,7 +61,7 @@ public class Game {
 	}
 
 	// SHOW
-	void show(PrintStream ps) {
+	public void show(PrintStream ps) {
 		ps.printf("Game State:\n");
 		ps.printf("- Grid Size: %dx%d cells\n", this.width_ncell, this.height_ncell);
 		ps.printf("- World Size: %.2fcm x %.2fcm\n", this.width_cm, this.height_cm);
