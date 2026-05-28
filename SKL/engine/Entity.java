@@ -7,7 +7,7 @@ import engine.ISU.Coord;
 import engine.ISU.Dimension;
 import engine.ISU.Vector;
 
-class Entity {
+public class Entity {
 
 	// FIELDS
 	public Grid grid;
@@ -94,16 +94,16 @@ class Entity {
 
 	// SHOW
 	public void show(PrintStream ps) {
-		ps.printf("Entity '%s' -> ", this.name);
+		ps.printf("Entity '%s'\n", this.name);
 		if (this.position != null) {
 			ps.printf("Grid: ");
 			this.position.show(ps);
 		}
 		if (this.center != null) {
-			ps.printf(" | Center: ");
+			ps.printf("Center: ");
 			this.center.show(ps);
 		}
-		ps.printf(" | Orientation: %d°\n", this.orientation_degree);
+		ps.printf("Orientation: %d°\n", this.orientation_degree);
 	}
 
 	// === MOVE ===
@@ -136,7 +136,7 @@ class Entity {
 	 * @param length_cm
 	 */
 	public void moveNorth(double length_cm) {
-		ISU.Vector v = this.isu.new Vector(0.0, length_cm);
+		ISU.Vector v = this.isu.new Vector(0.0, -length_cm);
 		this.translate(v);
 	}
 

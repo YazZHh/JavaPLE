@@ -104,7 +104,7 @@ public class Grid {
 
 		// SHOW
 		public void show(PrintStream ps) {
-			ps.printf("Dim_ncell(%d,%d)", this.x_ncell, this.y_ncell);
+			ps.printf("Dim_ncell(%d,%d)\n", this.x_ncell, this.y_ncell);
 		}
 
 	}
@@ -127,7 +127,7 @@ public class Grid {
 
 		// SHOW
 		public void show(PrintStream ps) {
-			ps.printf("Vec_ncell(%d,%d)", this.dx, this.dy);
+			ps.printf("Vec_ncell(%d,%d)\n", this.dx, this.dy);
 		}
 
 	}
@@ -215,7 +215,7 @@ public class Grid {
 
 		// SHOW
 		public void show(PrintStream ps) {
-			ps.printf("Pos_ncell(%d,%d)", this.x, this.y);
+			ps.printf("Pos_ncell(%d,%d)\n", this.x, this.y);
 		}
 
 	}

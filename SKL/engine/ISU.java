@@ -111,7 +111,7 @@ public class ISU {
 
 		// SHOW
 		public void show(PrintStream ps) {
-			ps.printf("ISUCoord(%.2fcm, %.2fcm)", this.x_cm, this.y_cm);
+			ps.printf("ISUCoord(%.2fcm, %.2fcm)\n", this.x_cm, this.y_cm);
 		}
 
 		// EQUALS
@@ -134,8 +134,8 @@ public class ISU {
 
 		// CONVERSION
 		public Grid.Position toGridPosition() {
-			int gridX = (int) (this.x_cm / game.cmPerCell);
-			int gridY = (int) (this.y_cm / game.cmPerCell);
+			int gridX = (int) Math.floor(this.x_cm / game.cmPerCell);
+			int gridY = (int) Math.floor(this.y_cm / game.cmPerCell);
 			return grid.new Position(gridX, gridY);
 		}
 
