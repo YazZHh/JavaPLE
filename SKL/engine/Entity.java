@@ -2,6 +2,7 @@
 package engine;
 
 import java.io.PrintStream;
+import java.util.List;
 
 import engine.ISU.Coord;
 import engine.ISU.Dimension;
@@ -20,6 +21,8 @@ public class Entity {
 	private ISU.Dimension step; // dimension d'un pas de déplacement
 	private Grid.Position position; // position dans la grille
 	private ISU.Coord center; // coordonnées en cm du centre de l'entité
+	private Bounding bounding;
+	private List<Grid.Cell> occupiedCells;
 
 	// FIELDS
 	private int orientation_degree; // orientation par rapport à l'axe des x
@@ -32,6 +35,7 @@ public class Entity {
 		this.isu = game.isu;
 		this.orientation_degree = 0;
 		this.step = this.isu.new Dimension(Game.cmPerCell, Game.cmPerCell);
+		this.bounding = new Bounding();
 	}
 
 	// SETTER
@@ -54,6 +58,10 @@ public class Entity {
 	public void setStep(ISU.Dimension step) {
 		this.step = step;
 	}
+	
+	public void setBounding(Bounding bounding) {
+		this.bounding = bounding;
+	}
 
 	// GETTER
 	public ISU.Coord center() {
@@ -70,6 +78,10 @@ public class Entity {
 	
 	public ISU.Dimension step(){
 		return this.step;
+	}
+	
+	public Bounding bounding() {
+		return this.bounding;
 	}
 
 	// TRANSLATION
