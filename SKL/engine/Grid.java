@@ -21,8 +21,8 @@ public class Grid {
 		this.game = game;
 		this.width_ncell = game.width_ncell;
 		this.height_ncell = game.height_ncell;
-		this.xAxis = new Axis(game.torusOnXaxis, width_ncell);
-		this.yAxis = new Axis(game.torusOnYaxis, height_ncell);
+		this.xAxis = new Axis(Game.torusOnXaxis, width_ncell);
+		this.yAxis = new Axis(Game.torusOnYaxis, height_ncell);
 		init();
 	}
 
@@ -59,7 +59,7 @@ public class Grid {
 		int x_ncell, y_ncell;
 
 		// CONSTRUCTOR
-		Dimension(int x_ncell, int y_ncell) {
+		public Dimension(int x_ncell, int y_ncell) {
 			this.x_ncell = x_ncell;
 			this.y_ncell = y_ncell;
 		}
@@ -97,8 +97,8 @@ public class Grid {
 
 		// CONVERSION
 		public ISU.Dimension toISUDimension() {
-			double w_cm = this.x_ncell * game.cmPerCell;
-			double h_cm = this.y_ncell * game.cmPerCell;
+			double w_cm = this.x_ncell * Game.cmPerCell;
+			double h_cm = this.y_ncell * Game.cmPerCell;
 			return game.isu.new Dimension(w_cm, h_cm);
 		}
 
@@ -198,14 +198,14 @@ public class Grid {
 
 		// CONVERSION
 		public ISU.Coord toISUCoord() {
-			double x_cm = this.x * game.cmPerCell;
-			double y_cm = this.y * game.cmPerCell;
+			double x_cm = this.x * Game.cmPerCell;
+			double y_cm = this.y * Game.cmPerCell;
 			return game.isu.new Coord(x_cm, y_cm);
 		}
 
 		public ISU.Coord toISUCoordCentered() {
-			double x_cm = (this.x + 0.5) * game.cmPerCell;
-			double y_cm = (this.y + 0.5) * game.cmPerCell;
+			double x_cm = (this.x + 0.5) * Game.cmPerCell;
+			double y_cm = (this.y + 0.5) * Game.cmPerCell;
 			return game.isu.new Coord(x_cm, y_cm);
 		}
 

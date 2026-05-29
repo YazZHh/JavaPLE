@@ -45,9 +45,9 @@ public class Main {
 		Entity ghost = new Entity("Blinky");
 		ghost.show(System.out);
 		assertEquals("Blinky", ghost.name);
-		assertEquals(0, ghost.orientation_degree);
-		assertNull(ghost.position);
-		assertNull(ghost.center);
+		assertEquals(0, ghost.orientation());
+		assertNull(ghost.position());
+		assertNull(ghost.center());
 		System.out.println("Test01 : PASSED\n\n");
 	}
 
@@ -77,10 +77,10 @@ public class Main {
 		grid.cellAt(startPos).show(System.out);
 		grid.cellAt(grid.new Position(3, 2)).show(System.out);
 		
-		assertEquals(3, pacman.position.x);
-		assertEquals(2, pacman.position.y);
-		assertEquals(-1.85, pacman.center.x_cm, 0.001);
-		assertEquals(-5.55, pacman.center.y_cm, 0.001);
+		assertEquals(3, pacman.position().x);
+		assertEquals(2, pacman.position().y);
+		assertEquals(-1.85, pacman.center().x_cm, 0.001);
+		assertEquals(-5.55, pacman.center().y_cm, 0.001);
 		
 		assertTrue(grid.cellAt(grid.new Position(3, 2)).entities.contains(pacman));
 		assertFalse(grid.cellAt(startPos).entities.contains(pacman));
@@ -107,10 +107,10 @@ public class Main {
 		pacman.show(System.out);
 		System.out.println();
 		
-		assertEquals(5.85, pacman.center.x_cm, 0.001);
-		assertEquals(1, pacman.position.x);
-		assertEquals(0, pacman.position.y);
-		assertTrue(grid.cellAt(pacman.position).entities.contains(pacman));
+		assertEquals(5.85, pacman.center().x_cm, 0.001);
+		assertEquals(1, pacman.position().x);
+		assertEquals(0, pacman.position().y);
+		assertTrue(grid.cellAt(pacman.position()).entities.contains(pacman));
 		assertFalse(grid.cellAt(startPos).entities.contains(pacman));
 		System.out.println("Test03 : PASSED\n\n");
 	}
@@ -135,8 +135,8 @@ public class Main {
 		pacman.moveEast(1);
 		pacman.show(System.out);
 		
-		assertEquals(0, pacman.position.x);
-		assertEquals(1, pacman.position.y);
+		assertEquals(0, pacman.position().x);
+		assertEquals(1, pacman.position().y);
 		assertTrue(grid.cellAt(grid.new Position(0, 1)).entities.contains(pacman));
 		System.out.println("Test04 : PASSED\n\n");
 	}
@@ -159,8 +159,8 @@ public class Main {
 		pacman.moveNorth(1);
 		pacman.show(System.out);
 		
-		assertEquals(1, pacman.position.x);
-		assertEquals(2, pacman.position.y);
+		assertEquals(1, pacman.position().x);
+		assertEquals(2, pacman.position().y);
 		assertTrue(grid.cellAt(grid.new Position(1, 2)).entities.contains(pacman));
 		System.out.println("Test05 : PASSED\n\n");
 	}
@@ -173,24 +173,24 @@ public class Main {
 		pacman.show(System.out);
 		System.out.println();
 		
-		assertEquals(0, pacman.orientation_degree);
+		assertEquals(0, pacman.orientation());
 		
 		System.out.println("Tourne de 90 degrés à droite");
 		pacman.turn(90);
 		pacman.show(System.out);
 		System.out.println();
-		assertEquals(90, pacman.orientation_degree);
+		assertEquals(90, pacman.orientation());
 	
 		System.out.println("Dépassement des 360 degrés");
 		pacman.turn(300);
 		pacman.show(System.out);
 		System.out.println();
-		assertEquals(30, pacman.orientation_degree);
+		assertEquals(30, pacman.orientation());
 		
 		System.out.println("Gestion des angles négatifs (tourner à gauche)");
 		pacman.turn(-40);
 		pacman.show(System.out);
-		assertEquals(350, pacman.orientation_degree); // -10 + 360 = 350
+		assertEquals(350, pacman.orientation()); // -10 + 360 = 350
 		System.out.println("Test06 : PASSED\n\n");
 	}
 
@@ -211,32 +211,32 @@ public class Main {
 		pacman.moveEast(3.7);
 		pacman.show(System.out);
 		System.out.println();
-		assertEquals(-5.55, pacman.center.x_cm, 0.001);
-		assertEquals(3, pacman.position.x);
+		assertEquals(-5.55, pacman.center().x_cm, 0.001);
+		assertEquals(3, pacman.position().x);
 		assertTrue(grid.cellAt(grid.new Position(3, 2)).entities.contains(pacman));
 		// x_cm = -5,55, y_cm = -9,25
 		
 		pacman.moveNorth(7.2);
 		pacman.show(System.out);
 		System.out.println();
-		assertEquals(2.05, pacman.center.y_cm, 0.001);
-		assertEquals(0, pacman.position.y);
+		assertEquals(2.05, pacman.center().y_cm, 0.001);
+		assertEquals(0, pacman.position().y);
 		assertTrue(grid.cellAt(grid.new Position(3, 0)).entities.contains(pacman));
 		// x_cm = -5,55, y_cm = 2,05
 		
 		pacman.moveWest(5.4);
 		pacman.show(System.out);
 		System.out.println();
-		assertEquals(7.55, pacman.center.x_cm, 0.001);
-		assertEquals(2, pacman.position.x);
+		assertEquals(7.55, pacman.center().x_cm, 0.001);
+		assertEquals(2, pacman.position().x);
 		assertTrue(grid.cellAt(grid.new Position(2, 0)).entities.contains(pacman));
 		// x_cm = 7,55, y_cm = 2,05
 		
 		pacman.moveSouth(3.9);
 		pacman.show(System.out);
 		System.out.println();
-		assertEquals(5.95, pacman.center.y_cm, 0.001);
-		assertEquals(1, pacman.position.y);
+		assertEquals(5.95, pacman.center().y_cm, 0.001);
+		assertEquals(1, pacman.position().y);
 		assertTrue(grid.cellAt(grid.new Position(2, 1)).entities.contains(pacman));
 		// x_cm = 7,55, y_cm = -5,95		
 		
@@ -261,8 +261,8 @@ public class Main {
 		System.out.println("moveEast(1)");
 		pacman.show(System.out);
 		System.out.println();
-		assertEquals(3, pacman.position.x);
-		assertEquals(2, pacman.position.y);
+		assertEquals(3, pacman.position().x);
+		assertEquals(2, pacman.position().y);
 		assertTrue(grid.cellAt(grid.new Position(3, 2)).entities.contains(pacman));
 		assertFalse(grid.cellAt(centerPos).entities.contains(pacman));
 		
@@ -270,42 +270,290 @@ public class Main {
 		System.out.println("moveNorth(2)");
 		pacman.show(System.out);
 		System.out.println();
-		assertEquals(3, pacman.position.x);
-		assertEquals(0, pacman.position.y);
+		assertEquals(3, pacman.position().x);
+		assertEquals(0, pacman.position().y);
 		assertTrue(grid.cellAt(grid.new Position(3, 0)).entities.contains(pacman));
 		
 		pacman.moveEast(2);
 		System.out.println("moveEast(2)");
 		pacman.show(System.out);
 		System.out.println();
-		assertEquals(0, pacman.position.x);
-		assertEquals(0, pacman.position.y);
+		assertEquals(0, pacman.position().x);
+		assertEquals(0, pacman.position().y);
 		assertTrue(grid.cellAt(grid.new Position(0, 0)).entities.contains(pacman));
 
 		pacman.moveNorth(1);
 		System.out.println("moveNorth(1)");
 		pacman.show(System.out);
 		System.out.println();
-		assertEquals(0, pacman.position.x);
-		assertEquals(4, pacman.position.y);
+		assertEquals(0, pacman.position().x);
+		assertEquals(4, pacman.position().y);
 		assertTrue(grid.cellAt(grid.new Position(0, 4)).entities.contains(pacman));
 
 		pacman.moveWest(1);
 		System.out.println("moveWest(1)");
 		pacman.show(System.out);
 		System.out.println();
-		assertEquals(4, pacman.position.x);
-		assertEquals(4, pacman.position.y);
+		assertEquals(4, pacman.position().x);
+		assertEquals(4, pacman.position().y);
 		assertTrue(grid.cellAt(grid.new Position(4, 4)).entities.contains(pacman));
 		
 		pacman.moveSouth(2);
 		System.out.println("moveSouth(2)");
 		pacman.show(System.out);
-		System.out.println();
-		assertEquals(4, pacman.position.x);
-		assertEquals(1, pacman.position.y);
+		assertEquals(4, pacman.position().x);
+		assertEquals(1, pacman.position().y);
 		assertTrue(grid.cellAt(grid.new Position(4, 1)).entities.contains(pacman));
 		
 		System.out.println("Test08 : PASSED\n\n");
+	}
+	
+	@Test
+	public void test09() {
+		System.out.println("Test09 : Test des opérations sur Grid.Vector");
+		Game game = new Game(5, 5);
+		Grid grid = game.grid;
+		
+		Grid.Vector v1 = grid.new Vector(2, 3);
+		assertEquals(2, v1.dx);
+		assertEquals(3, v1.dy);
+		
+		System.out.println("Addition de deux vecteurs discrets");
+		Grid.Vector v2 = grid.new Vector(1, -1);
+		v1.add(v2); // (2+1, 3-1) -> (3, 2)
+		
+		assertEquals(3, v1.dx);
+		assertEquals(2, v1.dy);
+		v1.show(System.out);
+		System.out.println("Test09 : PASSED\n\n");
+	}
+
+	@Test
+	public void test10() {
+		System.out.println("Test10 : Test complet de Grid.Dimension et équivalences");
+		Game game = new Game(4, 4);
+		Grid grid = game.grid;
+		
+		Grid.Dimension d1 = grid.new Dimension(2, 2);
+		Grid.Dimension d2 = grid.new Dimension(2, 2);
+		Grid.Dimension d3 = grid.new Dimension(6, 6);
+		
+		assertEquals(2, d1.x());
+		assertEquals(2, d1.y());
+		d1.show(System.out);
+		
+		assertTrue(d1.equals(d2));
+		assertFalse(d1.equals(d3));
+		assertFalse(d1.equals(null));
+		assertFalse(d1.equals("Pas une dimension"));
+		
+		System.out.println("Vérification de l'équivalence avec le Tore");
+		assertTrue(d1.equiv(d3));
+		assertFalse(d1.equiv(null));
+		
+		Grid.Dimension dHorsBornes = grid.new Dimension(5, -1);
+		dHorsBornes.normalize();
+		assertEquals(1, dHorsBornes.x());
+		assertEquals(3, dHorsBornes.y());
+		
+		ISU.Dimension isuDim = d1.toISUDimension();
+		assertEquals(2 * Game.cmPerCell, isuDim.x(), 0.001);
+		assertEquals(2 * Game.cmPerCell, isuDim.y(), 0.001);
+		
+		System.out.println("Test10 : PASSED\n\n");
+	}
+
+	@Test
+	public void test11() {
+		System.out.println("Test11 : Test des calculs géométriques de la Grille (Distance, Rotation, Cellules)");
+		Game game = new Game(5, 5);
+		Grid grid = game.grid;
+		
+		assertEquals(5, grid.width());
+		assertEquals(5, grid.height());
+		grid.show(System.out);
+		
+		Grid.Position p1 = grid.new Position(1, 1);
+		Grid.Position p2 = grid.new Position(4, 1);
+		
+		double dist = p1.distanceTo(p2);
+		System.out.println("Distance calculée sur le Tore : " + dist);
+		assertTrue(dist > 0);
+		
+		Grid.Position pivot = grid.new Position(2, 2);
+		Grid.Position point = grid.new Position(3, 2);
+		
+		System.out.println("Rotation de 90 degrés autour du pivot (2,2)");
+		point.rotateAround(pivot, 90);
+		assertNotNull(point);
+		
+		assertTrue(p1.equals(p1.copy()));
+		assertFalse(p1.equals(p2));
+		assertFalse(p1.equals("coucou"));
+		
+		System.out.println("Test11 : PASSED\n\n");
+	}
+
+	@Test
+	public void test12() {
+		System.out.println("Test12 : Gestion avancée des entités multiples dans les Cellules");
+		Game game = new Game(5, 5);
+		Grid grid = game.grid;
+		
+		Grid.Position p = grid.new Position(0, 0);
+		Grid.Cell cell = grid.cellAt(p);
+		cell.show(System.out);
+		
+		Entity e1 = new Entity("Ghost1");
+		Entity e2 = new Entity("Ghost2");
+
+		cell.add(e1);
+		cell.add(e2);
+		cell.show(System.out);
+		assertTrue(cell.contains(e1));
+		assertTrue(cell.contains(e2));
+		assertEquals(2, cell.entities.size());
+		
+		cell.add(e1);
+		assertEquals(2, cell.entities.size());
+		
+		cell.remove(e1);
+		cell.show(System.out);
+		assertFalse(cell.contains(e1));
+		assertTrue(cell.contains(e2));
+		assertEquals(1, cell.entities.size());
+		
+		cell.entities = null;
+		assertFalse(cell.contains(e2));
+		cell.show(System.out);
+		
+		System.out.println("Test12 : PASSED\n\n");
+	}
+	
+	@Test
+	public void test13() {
+		System.out.println("Test13 : Test ultra complet de ISU.Vector et ses rotations");
+		Game game = new Game(5, 5);
+		ISU isu = game.isu;
+		
+		ISU.Vector v1 = isu.new Vector(3.0, 4.0);
+		assertEquals(3.0, v1.targetX_cm, 0.001);
+		assertEquals(4.0, v1.targetY_cm, 0.001);
+		
+		System.out.println("Calcul de la norme : sqrt(3^2 + 4^2) = 5");
+		assertEquals(5.0, v1.norm(), 0.001);
+		
+		System.out.println("Scale uniforme de x2");
+		v1.scale(2.0); // (6.0, 8.0)
+		assertEquals(6.0, v1.targetX_cm, 0.001);
+		assertEquals(8.0, v1.targetY_cm, 0.001);
+		
+		System.out.println("Scale asymétrique (x0.5, y2.0)");
+		v1.scale(0.5, 2.0); // (3.0, 16.0)
+		assertEquals(3.0, v1.targetX_cm, 0.001);
+		assertEquals(16.0, v1.targetY_cm, 0.001);
+		
+		ISU.Vector v2 = isu.new Vector(2.0, -4.0);
+		v1.add(v2); // (5.0, 12.0)
+		assertEquals(5.0, v1.targetX_cm, 0.001);
+		assertEquals(12.0, v1.targetY_cm, 0.001);
+		
+		System.out.println("Produit scalaire (dot product)");
+		double dotProduct = v1.dot(v2); // 5*2 + 12*(-4) = 10 - 48 = -38
+		assertEquals(-38.0, dotProduct, 0.001);
+		
+		System.out.println("Transformation en vecteur unitaire");
+		ISU.Vector v3 = isu.new Vector(0.0, 5.0);
+		v3.unity(); // (0.0, 1.0)
+		assertEquals(0.0, v3.targetX_cm, 0.001);
+		assertEquals(1.0, v3.targetY_cm, 0.001);
+		
+		ISU.Vector vZero = isu.new Vector(0.0, 0.0);
+		vZero.unity();
+		assertEquals(0.0, vZero.targetX_cm, 0.001);
+		
+		System.out.println("Rotation du vecteur lui-même de 90 degrés");
+		ISU.Vector vRot = isu.new Vector(1.0, 0.0);
+		vRot.turn(90);
+		// cos(90)=0, sin(90)=1 -> x = 1*0 - 0*1 = 0, y = 1*1 + 0*0 = 1
+		assertEquals(0.0, vRot.targetX_cm, 0.001);
+		assertEquals(1.0, vRot.targetY_cm, 0.001);
+		
+		System.out.println("Test13 : PASSED\n\n");
+	}
+
+	@Test
+	public void test14() {
+		System.out.println("Test14 : Test complet de ISU.Coord, ISU.Dimension et Factories");
+		Game game = new Game(5, 5);
+		ISU isu = game.isu;
+		Grid grid = game.grid;
+		isu.set(grid);
+		
+		ISU.Dimension dim = isu.new Dimension(10.0, 20.0);
+		assertEquals(10.0, dim.x(), 0.001);
+		assertEquals(20.0, dim.y(), 0.001);
+		assertSame(isu, dim.isu());
+		
+		ISU.Dimension dimSame = isu.new Dimension(10.0, 20.0);
+		assertTrue(dim.equals(dimSame));
+		assertTrue(dim.equals(dim));
+		assertFalse(dim.equals(null));
+		assertFalse(dim.equals("chaine"));
+		
+		assertTrue(dim.equiv(dimSame));
+		assertFalse(dim.equiv(null));
+		dim.setxy(5.0, 5.0);
+		dim.normalize();
+		dim.show(System.out);
+		System.out.println();
+		
+		ISU.Vector vFromDim1 = dim.mkVector();
+		assertEquals(5.0, vFromDim1.targetX_cm, 0.001);
+		
+		ISU.Vector vFromDim2 = dim.mkScaledVector(2.0);
+		assertEquals(10.0, vFromDim2.targetX_cm, 0.001);
+		
+		ISU.Vector vFromDim3 = dim.mkScaledVector(2.0, 3.0);
+		assertEquals(15.0, vFromDim3.targetY_cm, 0.001);
+
+		System.out.println("Création et test des Coordonnées (cm)");
+		ISU.Coord c1 = isu.new Coord(3.7, 7.4);
+		c1.show(System.out);
+		
+		// Test equals sur Coord
+		assertTrue(c1.equals(c1));
+		assertTrue(c1.equals(isu.new Coord(3.7, 7.4)));
+		assertFalse(c1.equals(null));
+		assertFalse(c1.equals(dim));
+		
+		ISU.Vector vTrans = isu.new Vector(1.0, 1.0);
+		c1.translate(vTrans);
+		
+		ISU.Coord cCopy = c1.mkCopy();
+		assertEquals(c1.x_cm, cCopy.x_cm, 0.001);
+		
+		ISU.Coord cTranslated = c1.mkTranslated(vTrans);
+		assertNotNull(cTranslated);
+		
+		ISU.Coord cTarget = isu.new Coord(10.0, 10.0);
+		double dist = c1.distanceTo(cTarget);
+		assertTrue(dist >= 0);
+		
+		ISU.Vector vToward = c1.mkVectorToward(cTarget);
+		assertNotNull(vToward);
+		
+		System.out.println("Rotation de Coord autour de l'origine (0,0)");
+		ISU.Coord cRot = isu.new Coord(1.0, 0.0);
+		cRot.rotation(90);
+		
+		System.out.println("Rotation de Coord autour d'un pivot spécifique");
+		ISU.Coord cPivot = isu.new Coord(2.0, 2.0);
+		cRot.rotateAround(cPivot, 90);
+		
+		Grid.Position pFromCoord = c1.toGridPosition();
+		assertNotNull(pFromCoord);
+		
+		System.out.println("Test14 : PASSED\n\n");
 	}
 }

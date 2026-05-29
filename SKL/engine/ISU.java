@@ -17,8 +17,8 @@ public class ISU {
 	// CONSTRUCTOR
 	public ISU(Game game) {
 		this.game = game;
-		this.xAxis = new Axis(game.torusOnXaxis, game.width_ncell * game.cmPerCell);
-		this.yAxis = new Axis(game.torusOnYaxis, game.height_ncell * game.cmPerCell);
+		this.xAxis = new Axis(Game.torusOnXaxis, game.width_ncell * Game.cmPerCell);
+		this.yAxis = new Axis(Game.torusOnYaxis, game.height_ncell * Game.cmPerCell);
 	}
 
 	// SETTER
@@ -134,8 +134,8 @@ public class ISU {
 
 		// CONVERSION
 		public Grid.Position toGridPosition() {
-			int gridX = (int) Math.floor(this.x_cm / game.cmPerCell);
-			int gridY = (int) Math.floor(this.y_cm / game.cmPerCell);
+			int gridX = (int) Math.floor(this.x_cm / Game.cmPerCell);
+			int gridY = (int) Math.floor(this.y_cm / Game.cmPerCell);
 			return grid.new Position(gridX, gridY);
 		}
 

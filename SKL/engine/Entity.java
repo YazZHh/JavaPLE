@@ -17,12 +17,12 @@ public class Entity {
 
 	// FIELDS
 	public ISU.Dimension size; // dimension de l'entité
-	public ISU.Dimension step; // dimension d'un pas de déplacement
-	public Grid.Position position; // position dans la grille
-	public ISU.Coord center; // coordonnées en cm du centre de l'entité
+	private ISU.Dimension step; // dimension d'un pas de déplacement
+	private Grid.Position position; // position dans la grille
+	private ISU.Coord center; // coordonnées en cm du centre de l'entité
 
 	// FIELDS
-	public 	int orientation_degree; // orientation par rapport à l'axe des x
+	private int orientation_degree; // orientation par rapport à l'axe des x
 
 	// CONSTRUCTOR
 	public Entity(String name) {
@@ -31,6 +31,7 @@ public class Entity {
 		this.grid = game.grid;
 		this.isu = game.isu;
 		this.orientation_degree = 0;
+		this.step = this.isu.new Dimension(Game.cmPerCell, Game.cmPerCell);
 	}
 
 	// SETTER
@@ -49,6 +50,10 @@ public class Entity {
 	public void setSize(ISU.Dimension dimension) {
 		this.size = dimension;
 	}
+	
+	public void setStep(ISU.Dimension step) {
+		this.step = step;
+	}
 
 	// GETTER
 	public ISU.Coord center() {
@@ -61,6 +66,10 @@ public class Entity {
 
 	public int orientation() {
 		return this.orientation_degree;
+	}
+	
+	public ISU.Dimension step(){
+		return this.step;
 	}
 
 	// TRANSLATION
@@ -112,22 +121,22 @@ public class Entity {
 	 * @param nStep
 	 */
 	public void moveNorth(int nStep) {
-		Grid.Vector v = this.grid.new Vector(0, -nStep);
+		ISU.Vector v = this.isu.new Vector(0, -nStep*this.step.y_cm);
 		this.translate(v);
 	}
 
 	public void moveSouth(int nStep) {
-		Grid.Vector v = this.grid.new Vector(0, nStep);
+		ISU.Vector v = this.isu.new Vector(0, nStep*this.step.y_cm);
 		this.translate(v);
 	}
 	
 	public void moveEast(int nStep) {
-		Grid.Vector v = this.grid.new Vector(nStep, 0);
+		ISU.Vector v = this.isu.new Vector(nStep*this.step.x_cm, 0);
 		this.translate(v);
 	}
 
 	public void moveWest(int nStep) {
-		Grid.Vector v = this.grid.new Vector(-nStep, 0);
+		ISU.Vector v = this.isu.new Vector(-nStep*this.step.y_cm, 0);
 		this.translate(v);
 	}
 
