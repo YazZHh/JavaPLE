@@ -67,12 +67,15 @@ public class Axis {
 	 *         </UL>
 	 */
 	double normalize(double length) {
-		if (onTorus) {
-			double n = modp(length, this.perimeter);
-			if (n >= this.halfPerimeter)
-				return n - this.perimeter;
-			return n;
-		}
+//		if (onTorus) {
+//			double n = modp(length, this.perimeter);
+//			if (n >= this.halfPerimeter)
+//				return n - this.perimeter;
+//			return n;
+//		}
+//		return length;
+		if (onTorus)
+			return modp(length, this.perimeter);
 		return length;
 	}
 

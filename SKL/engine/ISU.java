@@ -38,8 +38,10 @@ public class ISU {
 
 		// GEOMETRY
 		public void normalize() {
-			this.x_cm = xAxis.normalize(this.x_cm);
-			this.y_cm = yAxis.normalize(this.y_cm);
+			if (xAxis.onTorus && this.x_cm > xAxis.perimeter)
+				this.x_cm = xAxis.perimeter;
+			if (yAxis.onTorus && this.y_cm > yAxis.perimeter)
+				this.y_cm = yAxis.perimeter;
 		}
 
 		// SETTER

@@ -79,8 +79,8 @@ public class Main {
 		
 		assertEquals(3, pacman.position().x);
 		assertEquals(2, pacman.position().y);
-		assertEquals(-1.85, pacman.center().x_cm, 0.001);
-		assertEquals(-5.55, pacman.center().y_cm, 0.001);
+		assertEquals(12.95, pacman.center().x_cm, 0.001);
+		assertEquals(9.25, pacman.center().y_cm, 0.001);
 		
 		assertTrue(grid.cellAt(grid.new Position(3, 2)).entities.contains(pacman));
 		assertFalse(grid.cellAt(startPos).entities.contains(pacman));
@@ -211,10 +211,10 @@ public class Main {
 		pacman.moveEast(3.7);
 		pacman.show(System.out);
 		System.out.println();
-		assertEquals(-5.55, pacman.center().x_cm, 0.001);
+		assertEquals(12.95, pacman.center().x_cm, 0.001);
 		assertEquals(3, pacman.position().x);
 		assertTrue(grid.cellAt(grid.new Position(3, 2)).entities.contains(pacman));
-		// x_cm = -5,55, y_cm = -9,25
+		// x_cm = 12.95, y_cm = 9,25
 		
 		pacman.moveNorth(7.2);
 		pacman.show(System.out);
@@ -222,7 +222,7 @@ public class Main {
 		assertEquals(2.05, pacman.center().y_cm, 0.001);
 		assertEquals(0, pacman.position().y);
 		assertTrue(grid.cellAt(grid.new Position(3, 0)).entities.contains(pacman));
-		// x_cm = -5,55, y_cm = 2,05
+		// x_cm = 12.95, y_cm = 2,05
 		
 		pacman.moveWest(5.4);
 		pacman.show(System.out);
@@ -238,7 +238,7 @@ public class Main {
 		assertEquals(5.95, pacman.center().y_cm, 0.001);
 		assertEquals(1, pacman.position().y);
 		assertTrue(grid.cellAt(grid.new Position(2, 1)).entities.contains(pacman));
-		// x_cm = 7,55, y_cm = -5,95		
+		// x_cm = 7,55, y_cm = 5,95		
 		
 		System.out.println("Test07 : PASSED\n\n");
 	}
