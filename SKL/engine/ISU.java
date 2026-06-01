@@ -43,7 +43,7 @@ public class ISU {
 			if (yAxis.onTorus && this.y_cm > yAxis.perimeter)
 				this.y_cm = yAxis.perimeter;
 		}
-
+		
 		// SETTER
 
 		public void setxy(double x_cm, double y_cm) {
