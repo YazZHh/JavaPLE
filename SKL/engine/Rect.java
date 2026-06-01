@@ -1,32 +1,47 @@
 // = Rect =
 package engine;
 
-public class Rect {
+import engine.ISU.Vector;
+
+public class Rect extends Shape implements iShape{
 
 	// FIELDS
-	double halfWidth, halfHeight;
-	int angle_degree;
+	private double halfWidth, halfHeight;
+	private int angle_degree;
 
 	// CONSTRUCTOR
-	Rect(ISU.Coord center, ISU.Dimension size, int angle_degree) {
-		throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `Rect`");
+	public Rect(ISU.Coord center, ISU.Dimension size, int angle_degree) {
+		super(center);
+		this.halfWidth = size.x_cm/2;
+		this.halfHeight = size.y_cm/2;	
+		this.angle_degree = angle_degree;
+	}
+	
+	// GETTER
+	public double getHalfWidth() {
+		return this.halfWidth;
+	}
+	
+	public double getHalfHeight() {
+		return this.halfHeight;
 	}
 
 	// TRANSLATION ?
 
 	// ROTATION
-	void rotate(int angle_degree) {
-		throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `rotate`");
+	private void rotate(int angle_degree) {
+		this.angle_degree = angle_degree;
 	}
 
 	// == INTERSECTION ==
-	boolean intersects(iShape shape) {
-		throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `intersects`");
+	public boolean intersects(iShape shape) {
+		return shape.intersects(this);
 	}
 
 	// === Rect/Circle Intersection ===
-	boolean intersects(Circle circle) {
-		throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `intersects`");
+	public boolean intersects(Circle circle) {
+		RectCircleIntersection rc = new RectCircleIntersection(this, circle);
+		return rc.intersects();
 	}
 
 	// === Helping inner class ===
@@ -43,15 +58,17 @@ public class Rect {
 	 *           </UL>
 	 * @implNote Il y a intersection si distance(P,C) < rayon du cercle</LI>
 	 */
-	class RectCircleIntersection {
+	public class RectCircleIntersection {
 
 		// FIELDS
-		Rect outer;
-		Circle circle;
+		private Rect outer;
+		private Circle circle;
 
 		// CONSTRUCTOR
-		RectCircleIntersection(Rect outer, Circle circle) {
-			throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `RectCircleIntersection`");
+		public RectCircleIntersection(Rect outer, Circle circle) {
+			this.outer = new Rect(outer.center.mkCopy(), isu.new Dimension(outer.getHalfWidth()*2, outer.getHalfHeight()*2), outer.angle_degree);
+			this.circle = new Circle(circle.center.mkCopy(), circle.getRadius()); 
+			remedy();
 		}
 
 		// REMEDY means `set right an undesirable situation`
@@ -63,15 +80,23 @@ public class Rect {
 		 * @implNote On translate le centre du cercle
 		 * @implNote On déplace par rotation le centre du cercle de -Rect.angle.
 		 */
-		void remedy() {
-			throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `remedy`");
+		public void remedy() {
+			Vector v = isu.new Vector(-this.outer.center.x_cm, -this.outer.center.y_cm);
+			this.outer.center.translate(v);
+			this.circle.center.translate(v);
+			this.circle.center.rotateAround(this.outer.center, -this.outer.angle_degree);
 		}
 
 		// INTERSECTION in the easy case
-		boolean intersects() {
-			throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `intersects`");
-		}
+			public boolean intersects() {
+				ISU.Coord p = closestRectpoint();
+			    double deltaX = this.circle.center.x_cm - p.x_cm;
+			    double deltaY = this.circle.center.y_cm - p.y_cm;
+			    return Math.sqrt(deltaY*deltaX + deltaY*deltaY) < this.circle.getRadius();
+			}
 
+//		return circle.center.distanceTo(p) < circle.getRadius();
+		
 		/**
 		 * @apiNote POINT LE PLUS PROCHE DU CENTRE DU CERCLE
 		 * @implNote on projette les coins du rectange (c1,c2) et le centre (c) du
@@ -82,33 +107,50 @@ public class Rect {
 		 *           proche est parmi {c1.y, c2.y, c.y}
 		 *
 		 */
-		ISU.Coord closestRectpoint() {
-			throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `closestRectpoint`");
+		public ISU.Coord closestRectpoint() {
+			double closestX = clamp(this.circle.center.x_cm, -this.outer.getHalfWidth(), this.outer.getHalfWidth());
+			double closestY = clamp(this.circle.center.y_cm, -this.outer.getHalfHeight(), this.outer.getHalfHeight());
+			return this.outer.isu.new Coord(closestX, closestY);
 		}
 
 		/**
-		 * @return &in; {p, l, r}
+		 * @return ∈ {p, l, r}
 		 * @implNote la position dans l'interval [l,r] la plus proche de p est :
-		 * @implNote p si p &in; [l,r]
+		 * @implNote p si p ∈ [l,r]
 		 * @implNote l si p < l
 		 * @implNote r si r < p
 		 * @param p = position
-		 * @param l = borne inférieure de l'interval
-		 * @param r = borne supérieure de l'interval
+		 * @param l = borne inférieure de l'intervalle
+		 * @param r = borne supérieure de l'intervalle
 		 */
-		double clamp(double p, double l, double r) {
-			throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `clamp`");
+		public double clamp(double p, double l, double r) {
+			if (l <= p && p <= r)
+				return p;
+			else if (p < l)
+				return l;
+			return r;
 		}
 
 	}
 
 	// === Rect/Rect Intersection ===
-	boolean intersects(Rect rect) {
-		throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `intersects`");
+	public boolean intersects(Rect rect) {
+		RectRectIntersection rr = new RectRectIntersection(this, rect);
+		// instancier deux fois ??
+		return rr.intersects();
 	}
 
 	// === Helping inner class ===
-	class RectRectIntersection {
-
+	public class RectRectIntersection {
+		private Rect rect1, rect2;
+		
+		public RectRectIntersection(Rect rect1, Rect rect2) {
+			this.rect1 = rect1;
+			this.rect2 = rect2;
+		}
+		
+		public boolean intersects() {
+			throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `clamp`");
+		}
 	}
 }

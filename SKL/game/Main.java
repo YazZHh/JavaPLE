@@ -4,6 +4,8 @@ package game;
 import engine.Game;
 import engine.Grid;
 import engine.ISU;
+import engine.Rect;
+import engine.Circle;
 import engine.Entity;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -555,5 +557,41 @@ public class Main {
 		assertNotNull(pFromCoord);
 		
 		System.out.println("Test14 : PASSED\n\n");
+	}
+	
+	@Test
+	public void test15() {
+		System.out.println("Test15 : Test des collisions Cercle/Rectangle");
+		Game game = new Game(4, 4);
+		ISU isu = game.isu;
+		
+		Rect rect1 = new Rect(isu.new Coord(5.0, 5.0), isu.new Dimension(4.0, 2.0), 0);
+		Circle circle1 = new Circle(isu.new Coord(7.2, 5.0), 1.5);
+		
+		System.out.println("Vérification collision classique (attendré : TRUE)");
+		assertTrue(rect1.intersects(circle1), "Le cercle devrait intersecter le rectangle !");
+		
+		double maxW = game.grid.width() * Game.cmPerCell;
+		
+		ISU.Coord rectCenterTorus = isu.new Coord(maxW - 1.0, 5.0);
+		Rect rectTorus = new Rect(rectCenterTorus, isu.new Dimension(4.0, 2.0), 0);
+		
+		ISU.Coord circleCenterTorus = isu.new Coord(1.0, 5.0);
+		Circle circleTorus = new Circle(circleCenterTorus, 1.5);
+		
+		System.out.println("Vérification collision à travers les bords du Tore (attendré : TRUE)");
+		assertTrue(rectTorus.intersects(circleTorus), "La collision devrait passer à travers la couture du Tore !");
+		
+		System.out.println("Test15 : PASSED\n\n");
+	}
+	
+	@Test
+	public void test16() {
+		Game game = new Game(6, 6);
+		ISU isu = game.isu;
+		Rect carre = new Rect(isu.new Coord(2.0, 2.0), isu.new Dimension(4.0, 4.0), 0);
+		Circle circle = new Circle(isu.new Coord(5, 5), 2);
+        assertTrue(carre.intersects(circle));
+
 	}
 }
