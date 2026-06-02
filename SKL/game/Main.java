@@ -586,12 +586,50 @@ public class Main {
 	}
 	
 	@Test
-	public void test16() {
+	public void test15_Thibaut() {
 		Game game = new Game(6, 6);
 		ISU isu = game.isu;
 		Rect carre = new Rect(isu.new Coord(2.0, 2.0), isu.new Dimension(4.0, 4.0), 0);
 		Circle circle = new Circle(isu.new Coord(5, 5), 2);
         assertTrue(carre.intersects(circle));
+	}
+	
+	@Test
+	public void test16() {
+		System.out.println("Test16 : Test des collisions Rectangle/Rectangle (MODE PRO)");
+		Game game = new Game(4, 4);
+		ISU isu = game.isu;
 
+		// --- CAS 1 : Collision classique avec angle ---
+		// Un rectangle horizontal au centre
+		Rect r1 = new Rect(isu.new Coord(5.0, 5.0), isu.new Dimension(4.0, 2.0), 0);
+		// Un rectangle incliné à 45° qui rentre dedans par le coin
+		Rect r2 = new Rect(isu.new Coord(6.5, 5.5), isu.new Dimension(3.0, 1.5), 45);
+
+		System.out.println("Vérification Rect/Rect avec collision (attendu : TRUE)");
+		assertTrue(r1.intersects(r2), "Les rectangles devraient s'intersecter de fou furieux !");
+		assertTrue(r2.intersects(r1), "La collision doit être symétrique, putain !");
+
+		// --- CAS 2 : Pas de collision (Juste à côté mais inclinés) ---
+		// On décale r2 un bon coup vers la droite
+		Rect r3 = new Rect(isu.new Coord(10.0, 5.0), isu.new Dimension(3.0, 1.5), 45);
+
+		System.out.println("Vérification Rect/Rect SANS collision (attendu : FALSE)");
+		assertFalse(r1.intersects(r3), "Les rectangles ne se touchent pas du tout !");
+		assertFalse(r3.intersects(r1), "La non-collision doit être symétrique aussi !");
+
+		// --- CAS 3 : Le piège mortel du Tore ---
+		double maxW = game.grid.width() * Game.cmPerCell; // Largeur max de la map
+		
+		// rTorus1 est collé au bord droit (X max)
+		Rect rTorus1 = new Rect(isu.new Coord(maxW - 1.0, 4.0), isu.new Dimension(3.0, 2.0), 0);
+		// rTorus2 est collé au bord gauche (X = 0)
+		Rect rTorus2 = new Rect(isu.new Coord(1.0, 4.0), isu.new Dimension(3.0, 2.0), 0);
+
+		System.out.println("Vérification Rect/Rect à travers le Tore (attendu : TRUE)");
+		assertTrue(rTorus1.intersects(rTorus2), "Le Tore doit faire boucler les rectangles, ils se touchent !");
+		assertTrue(rTorus2.intersects(rTorus1), "Symétrie torique obligatoire, putain !");
+
+		System.out.println("Test16 : PASSED\n\n");
 	}
 }

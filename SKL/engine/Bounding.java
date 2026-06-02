@@ -21,14 +21,11 @@ public class Bounding {
 
 	// BUILDER
 	public void add(iShape shape) {
-		if (shape != null)
-			this.boundings.add(shape);
+		this.boundings.add(shape);
 	}
 
 	// INTERSECTION
 	public boolean intersects(iShape shape) {
-		if (shape == null)
-			return false;
 		for (iShape s : boundings) {
 			if (s.intersects(shape))
 				return true;
@@ -37,8 +34,6 @@ public class Bounding {
 	}
 
 	public boolean intersects(Bounding bounding) {
-		if (bounding == null)
-			return false;
 		for (iShape s1 : this.boundings) {
 			for (iShape s2 : bounding.boundings()) {
 				if (s1.intersects(s2))

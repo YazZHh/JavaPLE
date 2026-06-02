@@ -1,26 +1,35 @@
 // = Circle =
 package engine;
 
-public class Circle {
+import engine.Rect.RectCircleIntersection;
+
+public class Circle extends Shape implements iShape {
 
 	private double radius;
 
 	// CONSTRUCTOR
-	Circle(ISU.Coord center, double radius) {
-		throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `Circle`");
+	public Circle(ISU.Coord center, double radius) {
+		super(center);
+		this.radius = radius;
+	}
+	
+	// GETTER
+	public double getRadius() {
+		return this.radius;
 	}
 
 	// INTERSECTION
-	boolean intersects(Rect rect) {
-		throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `intersects`");
+	public boolean intersects(Rect rect) {
+		RectCircleIntersection rc = rect.new RectCircleIntersection(rect, this);
+		return rc.intersects();
+	}
+	
+	public boolean intersects(Circle circle) {
+		return (this.center.distanceTo(circle.center) <= (this.radius + circle.radius));
 	}
 
-	boolean intersects(Circle circle) {
-		throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `intersects`");
-	}
-
-	boolean intersects(iShape shape) {
-		throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `intersects`");
+	public boolean intersects(iShape shape) {
+		return shape.intersects(this);
 	}
 
 }

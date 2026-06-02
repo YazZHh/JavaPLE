@@ -3,7 +3,7 @@ package engine;
 
 import engine.ISU.Vector;
 
-public class Rect extends Shape implements iShape{
+public class Rect extends Shape implements iShape {
 
 	// FIELDS
 	private double halfWidth, halfHeight;
@@ -12,16 +12,16 @@ public class Rect extends Shape implements iShape{
 	// CONSTRUCTOR
 	public Rect(ISU.Coord center, ISU.Dimension size, int angle_degree) {
 		super(center);
-		this.halfWidth = size.x_cm/2;
-		this.halfHeight = size.y_cm/2;	
+		this.halfWidth = size.x_cm / 2;
+		this.halfHeight = size.y_cm / 2;
 		this.angle_degree = angle_degree;
 	}
-	
+
 	// GETTER
 	public double getHalfWidth() {
 		return this.halfWidth;
 	}
-	
+
 	public double getHalfHeight() {
 		return this.halfHeight;
 	}
@@ -29,7 +29,7 @@ public class Rect extends Shape implements iShape{
 	// TRANSLATION ?
 
 	// ROTATION
-	private void rotate(int angle_degree) {
+	public void rotate(int angle_degree) {
 		this.angle_degree = angle_degree;
 	}
 
@@ -66,8 +66,9 @@ public class Rect extends Shape implements iShape{
 
 		// CONSTRUCTOR
 		public RectCircleIntersection(Rect outer, Circle circle) {
-			this.outer = new Rect(outer.center.mkCopy(), isu.new Dimension(outer.getHalfWidth()*2, outer.getHalfHeight()*2), outer.angle_degree);
-			this.circle = new Circle(circle.center.mkCopy(), circle.getRadius()); 
+			this.outer = new Rect(outer.center.mkCopy(),
+					isu.new Dimension(outer.getHalfWidth() * 2, outer.getHalfHeight() * 2), outer.angle_degree);
+			this.circle = new Circle(circle.center.mkCopy(), circle.getRadius());
 			remedy();
 		}
 
@@ -88,15 +89,15 @@ public class Rect extends Shape implements iShape{
 		}
 
 		// INTERSECTION in the easy case
-			public boolean intersects() {
-				ISU.Coord p = closestRectpoint();
-			    double deltaX = this.circle.center.x_cm - p.x_cm;
-			    double deltaY = this.circle.center.y_cm - p.y_cm;
-			    return Math.sqrt(deltaY*deltaX + deltaY*deltaY) < this.circle.getRadius();
-			}
+		public boolean intersects() {
+			ISU.Coord p = closestRectpoint();
+			double deltaX = this.circle.center.x_cm - p.x_cm;
+			double deltaY = this.circle.center.y_cm - p.y_cm;
+			return Math.sqrt(deltaX * deltaX + deltaY * deltaY) < this.circle.getRadius();
+		}
 
 //		return circle.center.distanceTo(p) < circle.getRadius();
-		
+
 		/**
 		 * @apiNote POINT LE PLUS PROCHE DU CENTRE DU CERCLE
 		 * @implNote on projette les coins du rectange (c1,c2) et le centre (c) du
@@ -136,7 +137,6 @@ public class Rect extends Shape implements iShape{
 	// === Rect/Rect Intersection ===
 	public boolean intersects(Rect rect) {
 		RectRectIntersection rr = new RectRectIntersection(this, rect);
-		// instancier deux fois ??
 		return rr.intersects();
 	}
 
@@ -150,7 +150,56 @@ public class Rect extends Shape implements iShape{
 		}
 		
 		public boolean intersects() {
-			throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `clamp`");
+			// 1. Calcul du vecteur de distance entre les centres prenant en compte le TORE
+			// On utilise la géométrie du monde pour trouver le chemin le plus court
+			double dx = rect2.center.x_cm - rect1.center.x_cm;
+			double dy = rect2.center.y_cm - rect1.center.y_cm;
+			
+			if (Game.torusOnXaxis) {
+				double perimeterX = isu.xAxis.perimeter;
+				dx = dx % perimeterX;
+				if (dx > perimeterX / 2) dx -= perimeterX;
+				if (dx < -perimeterX / 2) dx += perimeterX;
+			}
+			if (Game.torusOnYaxis) {
+				double perimeterY = isu.yAxis.perimeter;
+				dy = dy % perimeterY;
+				if (dy > perimeterY / 2) dy -= perimeterY;
+				if (dy < -perimeterY / 2) dy += perimeterY;
+			}
+			
+			Vector t = rect1.isu.new Vector(dx, dy);
+			
+			// 2. Axes de Rect1 basés sur son angle global original
+			double rad1 = Math.toRadians(rect1.angle_degree);
+			Vector a1 = rect1.isu.new Vector(Math.cos(rad1), Math.sin(rad1));
+			Vector a2 = rect1.isu.new Vector(-Math.sin(rad1), Math.cos(rad1));
+			
+			// 3. Axes de Rect2 basés sur son angle global original
+			double rad2 = Math.toRadians(rect2.angle_degree);
+			Vector a3 = rect1.isu.new Vector(Math.cos(rad2), Math.sin(rad2));
+			Vector a4 = rect1.isu.new Vector(-Math.sin(rad2), Math.cos(rad2));
+			
+			double hx1 = rect1.getHalfWidth();
+			double hy1 = rect1.getHalfHeight();
+			double hx2 = rect2.getHalfWidth();
+			double hy2 = rect2.getHalfHeight();
+			
+			// --- LES 4 TESTS DU SAT ---
+			
+			// Test Axe X de rect1
+			if (Math.abs(t.dot(a1)) > hx1 + hx2 * Math.abs(a3.dot(a1)) + hy2 * Math.abs(a4.dot(a1))) return false;
+			
+			// Test Axe Y de rect1
+			if (Math.abs(t.dot(a2)) > hy1 + hx2 * Math.abs(a3.dot(a2)) + hy2 * Math.abs(a4.dot(a2))) return false;
+			
+			// Test Axe X de rect2
+			if (Math.abs(t.dot(a3)) > hx2 + hx1 * Math.abs(a1.dot(a3)) + hy1 * Math.abs(a2.dot(a3))) return false;
+			
+			// Test Axe Y de rect2
+			if (Math.abs(t.dot(a4)) > hy2 + hx1 * Math.abs(a1.dot(a4)) + hy1 * Math.abs(a2.dot(a4))) return false;
+			
+			return true;
 		}
 	}
 }

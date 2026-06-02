@@ -1,14 +1,15 @@
 package engine;
 
-public class Shape {
+public abstract class Shape {
 
 	// FIELD
-	ISU isu;
-	ISU.Coord center;
+	protected ISU isu;
+	protected ISU.Coord center;
 
 	// CONSTRUCTOR
-	Shape(ISU.Coord center) {
-		throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `Shape`");
+	public Shape(ISU.Coord center) {
+		this.center = center;
+		this.isu = Game.game().isu;
 	}
-
+	
 }

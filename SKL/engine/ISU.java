@@ -131,7 +131,6 @@ public class ISU {
 			double dx = xAxis.distance(this.x_cm, target.x_cm);
 			double dy = yAxis.distance(this.y_cm, target.y_cm);
 			return ISU.this.new Vector(dx, dy);
-			
 		}
 
 		// CONVERSION
