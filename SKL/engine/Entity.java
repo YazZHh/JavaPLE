@@ -195,10 +195,10 @@ public class Entity {
 	}
 	
 	public void occupy(Grid.Position position) {
-		if (this.position != null) {
-			this.grid.cellAt(position).add(this);
-			this.occupied.add(this.grid.cellAt(this.position));
-		}
+		retract();
+		this.position = position;
+		this.center = this.position.toISUCoordCentered();
+		deploy();
 	}
 	
 	public void retract() {
