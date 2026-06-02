@@ -2,6 +2,7 @@
 package engine;
 
 import java.io.PrintStream;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -38,11 +39,14 @@ public class Entity {
 		this.orientation_degree = 0;
 		this.step = this.isu.new Dimension(Game.cmPerCell, Game.cmPerCell);
 		this.bounding = new Bounding();
+		this.occupied = new HashSet<Grid.Cell>();
 	}
 
 	// SETTER
 	public void setPosition(Grid.Position position) {
-		this.position = position;
+//		this.position = position;
+//		this.occupied.add(this.grid.cellAt(this.grid.new Position(this.grid.xAxis.normalize(position.x), this.grid.yAxis.normalize(position.y))));
+		occupy(position);
 	}
 
 	public void setCoord(ISU.Coord center) {
@@ -178,12 +182,13 @@ public class Entity {
 
 	public void deploy() {
 		if (this.position != null) {
-			int width_cell  = (int) Math.round(this.size.x_cm / Game.cmPerCell);
-			int height_cell = (int) Math.round(this.size.y_cm / Game.cmPerCell);
-			int xmin = this.position.x - (width_cell-1)/2;
-			int xmax = this.position.x + width_cell/2;
-			int ymin = this.position.y - (height_cell-1)/2;
-			int ymax = this.position.y + height_cell/2;
+			double halfWidth = this.size.x_cm/2;
+			double halfHeight = this.size.y_cm/2;
+			int xmin = (int) (Math.round(((this.center.x_cm - halfWidth)/Game.cmPerCell)*1000)/1000);
+			int xmax = (int) (Math.floor((((this.center.x_cm + halfWidth)/Game.cmPerCell)-0.5)*1000)/1000);
+			int ymin = (int) (Math.round(((this.center.y_cm - halfHeight)/Game.cmPerCell)*1000)/1000);
+			int ymax = (int) (Math.floor((((this.center.y_cm + halfHeight)/Game.cmPerCell)-0.5)*1000)/1000);
+			
 			for (int y=ymin; y<=ymax; y++) {
 				for (int x=xmin; x<=xmax; x++) {
 					Grid.Cell c = this.grid.cellAt(this.grid.new Position(this.grid.xAxis.normalize(x), this.grid.yAxis.normalize(y))); 

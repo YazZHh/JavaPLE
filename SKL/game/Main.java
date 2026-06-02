@@ -61,6 +61,7 @@ public class Main {
 		Entity pacman = new Entity("PacMan");
 
 		Grid.Position startPos = grid.new Position(1, 1);
+		pacman.setSize(grid.new Dimension(1, 1));
 		pacman.setPosition(startPos.copy());
 		pacman.setCoord(startPos.toISUCoordCentered());
 		grid.cellAt(startPos).add(pacman);
@@ -97,6 +98,7 @@ public class Main {
 		Entity pacman = new Entity("PacMan");
 		
 		Grid.Position startPos = grid.new Position(0, 0);
+		pacman.setSize(grid.new Dimension(1, 1));
 		pacman.setPosition(startPos);
 		pacman.setCoord(startPos.toISUCoordCentered());
 		grid.cellAt(startPos).add(pacman);
@@ -125,6 +127,7 @@ public class Main {
 		Entity pacman = new Entity("TorusRunnerX");
 		
 		Grid.Position rightEdge = grid.new Position(2, 1); // Case tout à droite
+		pacman.setSize(grid.new Dimension(1, 1));
 		pacman.setPosition(rightEdge);
 		pacman.setCoord(rightEdge.toISUCoordCentered());
 		grid.cellAt(rightEdge).add(pacman);
@@ -153,6 +156,7 @@ public class Main {
 		System.out.println();
 		
 		Grid.Position topEdge = grid.new Position(1, 0);
+		pacman.setSize(grid.new Dimension(1, 1));
 		pacman.setPosition(topEdge);
 		pacman.setCoord(topEdge.toISUCoordCentered());
 		grid.cellAt(topEdge).add(pacman);
@@ -204,6 +208,7 @@ public class Main {
 		Entity pacman = new Entity("ContinuousMover");
 		
 		Grid.Position centerPos = grid.new Position(2, 2);
+		pacman.setSize(grid.new Dimension(1, 1));
 		pacman.setPosition(centerPos.copy());
 		pacman.setCoord(centerPos.toISUCoordCentered()); // (9.25, 9.25)
 		grid.cellAt(centerPos).add(pacman);
@@ -253,6 +258,7 @@ public class Main {
 		Entity pacman = new Entity("DiscreteMover");
 		
 		Grid.Position centerPos = grid.new Position(2, 2);
+		pacman.setSize(grid.new Dimension(1, 1));
 		pacman.setPosition(centerPos.copy());
 		pacman.setCoord(centerPos.toISUCoordCentered());
 		grid.cellAt(centerPos).add(pacman);
@@ -659,5 +665,125 @@ public class Main {
 		assertFalse(circleCorner.intersects(rectCorner), "Erreur Symétrie Rect/Circle au coin");
 		
 		System.out.println("Test17 : PASSED\n\n");
+	}
+	
+	@Test
+	public void test18() {
+		System.out.println("Test18 : Vérification du déploiement multi-cases d'une entité (deploy, retract, occupy)");
+		Game game = new Game(5, 5);
+		Grid grid = game.grid;
+
+		Entity grosMonstre = new Entity("GrosMonstre");
+		grosMonstre.setSize(game.isu.new Dimension(3*Game.cmPerCell, 2*Game.cmPerCell));
+		Grid.Position centreInitial = grid.new Position(1, 1);
+		grosMonstre.setPosition(centreInitial);
+		grosMonstre.setCoord(centreInitial.toISUCoordCentered());
+		
+		System.out.println("Déploiement du monstre 3x2 centré en (1,1)...");
+		grosMonstre.deploy();
+		
+		for (int y = 0; y <= 2; y++) {
+			for (int x = 0; x <= 2; x++) {
+				assertTrue(grid.cellAt(grid.new Position(x, y)).entities.contains(grosMonstre), "Erreur Deploy : La case (" + x + "," + y + ") devrait être occupée !");
+			}
+		}
+		assertFalse(grid.cellAt(grid.new Position(3, 1)).entities.contains(grosMonstre), "Erreur Deploy : La case (3,1) ne devrait pas être occupée.");
+
+		System.out.println("Retrait du monstre...");
+		grosMonstre.retract();
+		
+		for (int y = 0; y <= 2; y++) {
+			for (int x = 0; x <= 2; x++) {
+				assertFalse(grid.cellAt(grid.new Position(x, y)).entities.contains(grosMonstre),
+						"Erreur Retract : La case (" + x + "," + y + ") n'a pas été libérée !");
+			}
+		}
+
+		System.out.println("Téléportation du monstre via occupy() vers la case (4, 4)...");
+		Grid.Position nouvellePos = grid.new Position(4, 4);
+		grosMonstre.occupy(nouvellePos);
+
+		assertEquals(4, grosMonstre.position().x);
+		assertEquals(4, grosMonstre.position().y);
+
+		int[] colonnesAttendues = {3, 4, 0};
+		int[] lignesAttendues = {4, 0};
+
+		for (int x : colonnesAttendues) {
+			for (int y : lignesAttendues) {
+				assertTrue(grid.cellAt(grid.new Position(x, y)).entities.contains(grosMonstre), "Erreur Occupy/Tore : La case périodique (" + x + "," + y + ") devrait être occupée !");
+			}
+		}
+
+		System.out.println("Test18 : PASSED\n\n");
+	}
+	
+	@Test
+	public void test19() {
+		System.out.println("Test19 : Vérification conjointe d'une entité 1x1 et d'une entité 3x3");
+		Game game = new Game(6, 6);
+		Grid grid = game.grid;
+
+		Entity petite = new Entity("Petite1x1");
+		petite.setSize(game.isu.new Dimension(1.0*Game.cmPerCell, 1.0*Game.cmPerCell));
+		Grid.Position posPetite = grid.new Position(1, 1);
+		petite.setPosition(posPetite);
+		petite.setCoord(posPetite.toISUCoordCentered());
+
+		Entity grosse = new Entity("Grosse3x3");
+		grosse.setSize(game.isu.new Dimension(3.0*Game.cmPerCell, 3.0*Game.cmPerCell));
+		Grid.Position posGrosse = grid.new Position(4, 4);
+		grosse.setPosition(posGrosse);
+		grosse.setCoord(posGrosse.toISUCoordCentered());
+
+		// 2. DÉPLOIEMENT
+		System.out.println("Déploiement des deux entités...");
+		petite.deploy();
+		grosse.deploy();
+
+		// 3. VÉRIFICATION DE LA PETITE (1x1 en (1,1))
+		// Elle ne doit occuper QUE la case (1,1)
+		assertTrue(grid.cellAt(grid.new Position(1, 1)).entities.contains(petite),
+				"Erreur 1x1 : La case (1,1) devrait contenir la petite entité.");
+		
+		// On vérifie une case adjacente pour être sûr qu'elle n'a pas débordé foireusement
+		assertFalse(grid.cellAt(grid.new Position(1, 2)).entities.contains(petite),
+				"Erreur 1x1 : La petite entité a débordé sur (1,2) alors qu'elle fait 1x1 !");
+
+		// 4. VÉRIFICATION DE LA GROSSE (3x3 centrée en (4,4))
+		// Autour de (4,4), avec le Tore sur une grille 6x6 :
+		// X va de 3 à 5 (4-1=3, 4+1=5)
+		// Y va de 3 à 5 (4-1=3, 4+1=5)
+		System.out.println("Vérification de la zone de l'entité 3x3...");
+		for (int y = 3; y <= 5; y++) {
+			for (int x = 3; x <= 5; x++) {
+				assertTrue(grid.cellAt(grid.new Position(x, y)).entities.contains(grosse),
+						"Erreur 3x3 : La case (" + x + "," + y + ") devrait être occupée par la grosse entité !");
+			}
+		}
+
+		// On vérifie qu'elles ne se chevauchent pas sur la grille
+		assertFalse(grid.cellAt(grid.new Position(1, 1)).entities.contains(grosse),
+				"Erreur : La grosse entité a envahi la case de la petite !");
+		assertFalse(grid.cellAt(grid.new Position(4, 4)).entities.contains(petite),
+				"Erreur : La petite entité a envahi la case centrale de la grosse !");
+
+		// 5. TEST DE RETRACT CROISÉ
+		System.out.println("Retrait de la petite entité uniquement...");
+		petite.retract();
+
+		// La petite doit avoir disparu de sa case
+		assertFalse(grid.cellAt(grid.new Position(1, 1)).entities.contains(petite),
+				"Erreur Retract : La petite entité est toujours en (1,1).");
+
+		// La grosse doit TOUJOURS être présente sur ses 9 cases intactes
+		for (int y = 3; y <= 5; y++) {
+			for (int x = 3; x <= 5; x++) {
+				assertTrue(grid.cellAt(grid.new Position(x, y)).entities.contains(grosse),
+						"Erreur Retract Croisé : Le retract de la petite a altéré la grosse en (" + x + "," + y + ") !");
+			}
+		}
+
+		System.out.println("Test19 : PASSED\n\n");
 	}
 }
