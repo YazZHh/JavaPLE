@@ -3,7 +3,9 @@ package engine;
 
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Set;
 
+import engine.Grid.Cell;
 import engine.ISU.Coord;
 import engine.ISU.Dimension;
 import engine.ISU.Vector;
@@ -22,7 +24,7 @@ public class Entity {
 	private Grid.Position position; // position dans la grille
 	private ISU.Coord center; // coordonnées en cm du centre de l'entité
 	private Bounding bounding;
-	private List<Grid.Cell> occupiedCells;
+	private Set<Grid.Cell> occupied;
 
 	// FIELDS
 	private int orientation_degree; // orientation par rapport à l'axe des x
@@ -86,20 +88,18 @@ public class Entity {
 
 	// TRANSLATION
 	public void translate(Grid.Vector v) {
-		if (this.position != null)
-			this.grid.cellAt(this.position).remove(this);
+		retract();
 		this.position.translate(v);
 		this.center = this.position.toISUCoordCentered();
-		this.grid.cellAt(this.position).add(this);
+		deploy();
 	}
 
 	public void translate(ISU.Vector v) {
-		if (this.position != null)
-			this.grid.cellAt(this.position).remove(this);
+		retract();
 		this.center.x_cm = this.isu.xAxis.normalize(this.center.x_cm + v.targetX_cm);
 		this.center.y_cm = this.isu.yAxis.normalize(this.center.y_cm + v.targetY_cm);
 		this.position = this.center.toGridPosition();
-		this.grid.cellAt(this.position).add(this);
+		deploy();
 	}
 
 	// TURN
@@ -176,4 +176,34 @@ public class Entity {
 		this.translate(v);
 	}
 
+	public void deploy() {
+		if (this.position != null) {
+			int width_cell  = (int) Math.round(this.size.x_cm / Game.cmPerCell);
+			int height_cell = (int) Math.round(this.size.y_cm / Game.cmPerCell);
+			int xmin = this.position.x - (width_cell-1)/2;
+			int xmax = this.position.x + width_cell/2;
+			int ymin = this.position.y - (height_cell-1)/2;
+			int ymax = this.position.y + height_cell/2;
+			for (int y=ymin; y<=ymax; y++) {
+				for (int x=xmin; x<=xmax; x++) {
+					Grid.Cell c = this.grid.cellAt(this.grid.new Position(this.grid.xAxis.normalize(x), this.grid.yAxis.normalize(y))); 
+					c.add(this);
+					this.occupied.add(c);
+				}
+			}
+		}
+	}
+	
+	public void occupy(Grid.Position position) {
+		if (this.position != null) {
+			this.grid.cellAt(position).add(this);
+			this.occupied.add(this.grid.cellAt(this.position));
+		}
+	}
+	
+	public void retract() {
+		for (Grid.Cell c : this.occupied) {
+			c.remove(this);
+		}
+	}
 }

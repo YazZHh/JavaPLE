@@ -587,49 +587,77 @@ public class Main {
 	
 	@Test
 	public void test15_Thibaut() {
+		System.out.println("Test15_Thibaut : Test collisions");
 		Game game = new Game(6, 6);
 		ISU isu = game.isu;
 		Rect carre = new Rect(isu.new Coord(2.0, 2.0), isu.new Dimension(4.0, 4.0), 0);
-		Circle circle = new Circle(isu.new Coord(5, 5), 2);
-        assertTrue(carre.intersects(circle));
+		Circle circle1 = new Circle(isu.new Coord(5.0, 5.0), 2);
+        assertTrue(carre.intersects(circle1));
+        Circle circle2 = new Circle(isu.new Coord(2.0 ,2.0),1.5);
+        assertTrue(carre.intersects(circle2));
+        Rect rect = new Rect(isu.new Coord(5.0, 5.0),isu.new Dimension(4.0, 4.0), 45);
+        assertTrue(rect.intersects(carre));
+        rect.translate(isu.new Vector(1.0, 1.0));
+        assertFalse(rect.intersects(carre));
+        System.out.println("Test15_Thibaut : PASSED\n\n");
 	}
 	
 	@Test
 	public void test16() {
-		System.out.println("Test16 : Test des collisions Rectangle/Rectangle (MODE PRO)");
+		System.out.println("Test16 : Test des collisions Rectangle/Rectangle");
 		Game game = new Game(4, 4);
 		ISU isu = game.isu;
 
-		// --- CAS 1 : Collision classique avec angle ---
-		// Un rectangle horizontal au centre
 		Rect r1 = new Rect(isu.new Coord(5.0, 5.0), isu.new Dimension(4.0, 2.0), 0);
-		// Un rectangle incliné à 45° qui rentre dedans par le coin
 		Rect r2 = new Rect(isu.new Coord(6.5, 5.5), isu.new Dimension(3.0, 1.5), 45);
+		System.out.println("Vérification Rect/Rect avec collision");
+		assertTrue(r1.intersects(r2), "Les rectangles devraient s'intersecter");
+		assertTrue(r2.intersects(r1), "La collision doit être symétrique");
 
-		System.out.println("Vérification Rect/Rect avec collision (attendu : TRUE)");
-		assertTrue(r1.intersects(r2), "Les rectangles devraient s'intersecter de fou furieux !");
-		assertTrue(r2.intersects(r1), "La collision doit être symétrique, putain !");
-
-		// --- CAS 2 : Pas de collision (Juste à côté mais inclinés) ---
-		// On décale r2 un bon coup vers la droite
 		Rect r3 = new Rect(isu.new Coord(10.0, 5.0), isu.new Dimension(3.0, 1.5), 45);
-
-		System.out.println("Vérification Rect/Rect SANS collision (attendu : FALSE)");
+		System.out.println("Vérification Rect/Rect SANS collision");
 		assertFalse(r1.intersects(r3), "Les rectangles ne se touchent pas du tout !");
 		assertFalse(r3.intersects(r1), "La non-collision doit être symétrique aussi !");
 
-		// --- CAS 3 : Le piège mortel du Tore ---
-		double maxW = game.grid.width() * Game.cmPerCell; // Largeur max de la map
-		
-		// rTorus1 est collé au bord droit (X max)
+		double maxW = game.grid.width() * Game.cmPerCell;
 		Rect rTorus1 = new Rect(isu.new Coord(maxW - 1.0, 4.0), isu.new Dimension(3.0, 2.0), 0);
-		// rTorus2 est collé au bord gauche (X = 0)
 		Rect rTorus2 = new Rect(isu.new Coord(1.0, 4.0), isu.new Dimension(3.0, 2.0), 0);
-
 		System.out.println("Vérification Rect/Rect à travers le Tore (attendu : TRUE)");
 		assertTrue(rTorus1.intersects(rTorus2), "Le Tore doit faire boucler les rectangles, ils se touchent !");
 		assertTrue(rTorus2.intersects(rTorus1), "Symétrie torique obligatoire, putain !");
-
+		
 		System.out.println("Test16 : PASSED\n\n");
+	}
+	
+	@Test
+	public void test17() {
+		System.out.println("Test17 : Cas de non-collision stricts (Rect/Rect et Rect/Circle)");
+		Game game = new Game(10, 10);
+		ISU isu = game.isu;
+
+		Rect r1 = new Rect(isu.new Coord(5.0, 5.0), isu.new Dimension(4.0, 2.0), 0);
+		Rect r2 = new Rect(isu.new Coord(9.05, 5.0), isu.new Dimension(4.0, 2.0), 0);
+		assertFalse(r1.intersects(r2), "Erreur Rect/Rect : Les rectangles ne se touchent pas (écart de 0.05cm).");
+		assertFalse(r2.intersects(r1), "Erreur Symétrie Rect/Rect");
+		
+		Rect rRot1 = new Rect(isu.new Coord(5.0, 5.0), isu.new Dimension(4.0, 2.0), 0);
+		Rect rRot2 = new Rect(isu.new Coord(8.0, 5.0), isu.new Dimension(3.0, 1.0), 90);
+		System.out.println("Rect / Rect (Esquive grâce à une rotation de 90°)");
+		assertFalse(rRot1.intersects(rRot2), "Erreur SAT : La rotation à 90° aurait dû éviter la collision.");
+		assertFalse(rRot2.intersects(rRot1), "Erreur Symétrie Rect/Rect avec rotation");
+		
+		Rect rect = new Rect(isu.new Coord(5.0, 5.0), isu.new Dimension(4.0, 2.0), 0);
+		Circle circle = new Circle(isu.new Coord(8.6, 5.0), 1.5);
+		System.out.println("Rect / Circle (Alignés horizontalement mais distants)");
+		assertFalse(rect.intersects(circle), "Erreur Rect/Circle : Le cercle est trop loin sur la droite.");
+		assertFalse(circle.intersects(rect), "Erreur Symétrie Rect/Circle");
+
+		Rect rectCorner = new Rect(isu.new Coord(5.0, 5.0), isu.new Dimension(2.0, 2.0), 0);
+		Circle circleCorner = new Circle(isu.new Coord(6.8, 6.8), 1.0);
+		System.out.println("Rect / Circle (Le cercle frôle un coin en diagonale)");
+		assertFalse(rectCorner.intersects(circleCorner), "Erreur Rect/Circle : Le cercle frôle le coin extérieur sans entrer.");
+		assertFalse(circleCorner.intersects(rectCorner), "Erreur Symétrie Rect/Circle au coin");
+		
+		System.out.println("Test17 : PASSED\n\n");
 	}
 }

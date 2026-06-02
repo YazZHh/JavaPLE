@@ -27,6 +27,9 @@ public class Rect extends Shape implements iShape {
 	}
 
 	// TRANSLATION ?
+	public void translate(ISU.Vector v) {
+		this.center.translate(v);
+	}
 
 	// ROTATION
 	public void rotate(int angle_degree) {
