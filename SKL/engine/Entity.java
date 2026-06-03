@@ -44,9 +44,7 @@ public class Entity {
 
 	// SETTER
 	public void setPosition(Grid.Position position) {
-//		this.position = position;
-//		this.occupied.add(this.grid.cellAt(this.grid.new Position(this.grid.xAxis.normalize(position.x), this.grid.yAxis.normalize(position.y))));
-		occupy(position);
+		this.position = position;
 	}
 
 	public void setCoord(ISU.Coord center) {
@@ -182,12 +180,34 @@ public class Entity {
 
 	public void deploy() {
 		if (this.position != null) {
-			double halfWidth = this.size.x_cm/2;
-			double halfHeight = this.size.y_cm/2;
-			int xmin = (int) (Math.round(((this.center.x_cm - halfWidth)/Game.cmPerCell)*1000)/1000);
-			int xmax = (int) (Math.floor((((this.center.x_cm + halfWidth)/Game.cmPerCell)-0.5)*1000)/1000);
-			int ymin = (int) (Math.round(((this.center.y_cm - halfHeight)/Game.cmPerCell)*1000)/1000);
-			int ymax = (int) (Math.floor((((this.center.y_cm + halfHeight)/Game.cmPerCell)-0.5)*1000)/1000);
+			double halfLongest = Math.max(this.size.x_cm/2.0, this.size.y_cm/2.0);
+			int xmin = ((int) Math.round((this.center.x_cm-halfLongest) / Game.cmPerCell))-1;
+			int ymin = ((int) Math.round((this.center.y_cm-halfLongest) / Game.cmPerCell))-1;
+			int xmax = ((int) Math.floor((this.center.x_cm+halfLongest - 1e-9) / Game.cmPerCell))+1;
+			int ymax = ((int) Math.floor((this.center.y_cm+halfLongest - 1e-9) / Game.cmPerCell))+1;
+			
+//			double xmin_raw = (this.center.x_cm - halfLongest) / Game.cmPerCell;
+//			double ymin_raw = (this.center.y_cm - halfLongest) / Game.cmPerCell;
+//			double xmax_raw = (this.center.x_cm + halfLongest-1e-9) / Game.cmPerCell;
+//			double ymax_raw = (this.center.y_cm + halfLongest-1e-9) / Game.cmPerCell;
+//
+//			int xmin = (int) Math.floor(xmin_raw);
+//			int ymin = (int) Math.floor(ymin_raw);
+//			int xmax = (int) Math.floor(xmax_raw);
+//			int ymax = (int) Math.floor(ymax_raw);
+//
+//			if (xmax_raw == Math.floor(xmax_raw))
+//				xmax--;
+//			if (ymax_raw == Math.floor(ymax_raw))
+//				ymax--;
+			
+			
+//			double halfWidth = this.size.x_cm/2;
+//			double halfHeight = this.size.y_cm/2;
+//			int xmin = (int) (Math.round(((this.center.x_cm - halfWidth)/Game.cmPerCell)*1000)/1000);
+//			int xmax = (int) (Math.floor((((this.center.x_cm + halfWidth)/Game.cmPerCell)-0.5)*1000)/1000);
+//			int ymin = (int) (Math.round(((this.center.y_cm - halfHeight)/Game.cmPerCell)*1000)/1000);
+//			int ymax = (int) (Math.floor((((this.center.y_cm + halfHeight)/Game.cmPerCell)-0.5)*1000)/1000);
 			
 			for (int y=ymin; y<=ymax; y++) {
 				for (int x=xmin; x<=xmax; x++) {

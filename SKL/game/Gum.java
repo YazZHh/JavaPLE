@@ -1,16 +1,23 @@
 // == GUM ==
 package game;
 
-public class Gum {
+import engine.Circle;
+import engine.Entity;
+import engine.Game;
+import engine.Grid.Position;
+import engine.ISU.Dimension;
+
+public class Gum extends Entity{
 
 	// CONSTRUCTOR
 	public Gum() {
-		throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `Gum`");
+		super("Gum");
+		this.setSize(this.isu.new Dimension(Game.cmPerCell/3, Game.cmPerCell/3));
 	}
 
 	// === Task COLLISION ===
 	public void setBounding() {
-		throw new UnsupportedOperationException("UNIMPLEMENTED METHOD `setBounding`");
+		this.bounding().add(new Circle(this.center(), 0.1));
 	}
 
 }
