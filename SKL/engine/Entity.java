@@ -2,6 +2,7 @@
 package engine;
 
 import java.io.PrintStream;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,10 +43,7 @@ public class Entity {
 		this.step = this.isu.new Dimension(Game.cmPerCell, Game.cmPerCell);
 		this.bounding = new Bounding();
 		this.occupied = new HashSet<Grid.Cell>();
-		
-		double halfLongest = Math.max(this.size.x_cm/2.0, this.size.y_cm/2.0);
-		this.boundingBoxTopLeft = this.isu.new Coord(this.center.x_cm-halfLongest-1, this.center.y_cm-halfLongest-1);
-		this.boundingBoxBottomRight = this.isu.new Coord(this.center.x_cm+halfLongest+1, this.center.y_cm+halfLongest+1);
+		this.updateBoundingBox();
 		
 	}
 
@@ -93,6 +91,12 @@ public class Entity {
 	
 	public Bounding bounding() {
 		return this.bounding;
+	}
+	
+	public void updateBoundingBox() {
+		double halfLongest = Math.max(this.size.x_cm/2.0, this.size.y_cm/2.0);
+		this.boundingBoxTopLeft = this.isu.new Coord(this.center.x_cm-halfLongest-1, this.center.y_cm-halfLongest-1);
+		this.boundingBoxBottomRight = this.isu.new Coord(this.center.x_cm+halfLongest+1, this.center.y_cm+halfLongest+1);
 	}
 
 	// TRANSLATION
@@ -185,6 +189,13 @@ public class Entity {
 		this.translate(v);
 	}
 
+	// INTERSECTS
+	public boolean intersects(Entity e) {
+		if (Collections.disjoint(this.occupied, e.occupied))
+			return false;
+		return this.bounding.intersects(e.bounding());
+	}
+	
 	public void deploy() {
 		if (this.position != null) {
 			double halfLongest = Math.max(this.size.x_cm/2.0, this.size.y_cm/2.0);
@@ -201,6 +212,7 @@ public class Entity {
 				}
 			}
 		}
+		this.updateBoundingBox();
 	}
 	
 	public void occupy(Grid.Position position) {
