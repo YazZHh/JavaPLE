@@ -2,10 +2,12 @@ package engine;
 
 public interface iShape {
 
-	boolean intersects(iShape shape);
+	public boolean intersects(iShape shape);
 
-	boolean intersects(Circle circle);
+	public boolean intersects(Circle circle);
 
-	boolean intersects(Rect rect);
+	public boolean intersects(Rect rect);
+	
+	public void rotateAround(ISU.Coord c, int angle_degree);
 
 }

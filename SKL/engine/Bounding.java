@@ -42,5 +42,10 @@ public class Bounding {
 		}
 		return false;
 	}
+	
+	public void rotateAround(ISU.Coord c, int angle_degree) {
+		for (iShape s : boundings)
+			s.rotateAround(c, angle_degree);
+	}
 
 }

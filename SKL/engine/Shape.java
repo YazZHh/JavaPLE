@@ -1,6 +1,6 @@
 package engine;
 
-public abstract class Shape {
+public abstract class Shape implements iShape {
 
 	// FIELD
 	protected ISU isu;
@@ -12,4 +12,9 @@ public abstract class Shape {
 		this.isu = Game.game().isu;
 	}
 	
+	// == INTERSECTION ==
+	public boolean intersects(iShape shape) {
+		return shape.intersects(this);
+	}
+
 }

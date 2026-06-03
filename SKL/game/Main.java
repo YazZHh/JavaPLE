@@ -5,6 +5,7 @@ import engine.Game;
 import engine.Grid;
 import engine.ISU;
 import engine.Rect;
+import engine.Grid.Position;
 import engine.Circle;
 import engine.Entity;
 
@@ -771,12 +772,35 @@ public class Main {
 		Game game = new Game(15, 15);
 		Grid grid = game.grid;
 		Model model = new Model();
+	
+		model.add(new Obstacle(1, 1));
 		
-		PacMan pacman = null;
-		Boss boss = null;
+		PacMan pacman = new PacMan();
+		model.add(pacman);
+		pacman.occupy(model.grid.new Position(5, 5));
+		pacman.setBounding();
+		
+		Gum gum = new Gum();
+		model.add(gum);
+		gum.occupy(model.grid.new Position(5, 6));
+		gum.setBounding();
+
+		Ghost ghost = new Ghost();
+		model.add(ghost);
+		ghost.occupy(model.grid.new Position(2, 2));
+		ghost.setBounding();
+
+		Boss boss = new Boss();
+		model.add(boss);
+		boss.occupy(model.grid.new Position(8, 4));
+		boss.setBounding();
+		
+		pacman = null;
+		boss = null;
 		Obstacle obstacle = null;
-		Gum gum = null;
-		Ghost ghost = null;
+		gum = null;
+		ghost = null;
+		
 		for (Entity e : model.entities) {
 			if (e instanceof PacMan)
 				pacman = (PacMan) e;

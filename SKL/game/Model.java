@@ -20,9 +20,7 @@ public class Model {
 	}
 	
 	public void initMap() {
-		this.add(new Obstacle(0, 0));
-		this.add(new Obstacle(1, 0));
-		this.add(new Obstacle(2, 0));
+		
 		
 		PacMan pacman = new PacMan();
 		this.add(pacman);
@@ -34,7 +32,6 @@ public class Model {
 		gum.occupy(this.grid.new Position(5, 6));
 		gum.setBounding();
 
-		// 3. Un Fantôme
 		Ghost ghost = new Ghost();
 		this.add(ghost);
 		ghost.occupy(this.grid.new Position(2, 2));

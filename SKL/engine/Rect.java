@@ -1,6 +1,7 @@
 // = Rect =
 package engine;
 
+import engine.ISU.Coord;
 import engine.ISU.Vector;
 
 public class Rect extends Shape implements iShape {
@@ -33,12 +34,7 @@ public class Rect extends Shape implements iShape {
 
 	// ROTATION
 	public void rotate(int angle_degree) {
-		this.angle_degree = angle_degree;
-	}
-
-	// == INTERSECTION ==
-	public boolean intersects(iShape shape) {
-		return shape.intersects(this);
+		this.angle_degree = (this.angle_degree + angle_degree)%360;
 	}
 
 	// === Rect/Circle Intersection ===
@@ -194,5 +190,11 @@ public class Rect extends Shape implements iShape {
 				return false;
 			return true;
 		}
+	}
+
+	@Override
+	public void rotateAround(Coord c, int angle_degree) {
+		this.center.rotateAround(c, angle_degree);
+		this.rotate(angle_degree);
 	}
 }

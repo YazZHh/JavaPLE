@@ -1,6 +1,7 @@
 // = Circle =
 package engine;
 
+import engine.ISU.Coord;
 import engine.Rect.RectCircleIntersection;
 
 public class Circle extends Shape implements iShape {
@@ -28,8 +29,8 @@ public class Circle extends Shape implements iShape {
 		return (this.center.distanceTo(circle.center) <= (this.radius + circle.radius));
 	}
 
-	public boolean intersects(iShape shape) {
-		return shape.intersects(this);
+	@Override
+	public void rotateAround(Coord c, int angle_degree) {
+		this.center.rotateAround(c, angle_degree);
 	}
-
 }
