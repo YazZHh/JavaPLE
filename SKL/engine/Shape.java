@@ -16,5 +16,13 @@ public abstract class Shape implements iShape {
 	public boolean intersects(iShape shape) {
 		return shape.intersects(this);
 	}
+	
+	public void translate(int dx, int dy) {
+		this.center.translate(this.isu.new Vector(dx*Game.cmPerCell, dy*Game.cmPerCell));
+	}
 
+	public void translate(ISU.Vector v) {
+		this.center.translate(v);
+	}
+	
 }

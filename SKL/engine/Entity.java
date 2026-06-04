@@ -11,6 +11,7 @@ import engine.Grid.Cell;
 import engine.ISU.Coord;
 import engine.ISU.Dimension;
 import engine.ISU.Vector;
+import game.Model;
 
 public class Entity {
 
@@ -29,9 +30,12 @@ public class Entity {
 	private Set<Grid.Cell> occupied;
 	private ISU.Coord boundingBoxTopLeft;
 	private ISU.Coord boundingBoxBottomRight;
-
-	// FIELDS
 	private int orientation_degree; // orientation par rapport à l'axe des x
+
+	private Stunt stunt;
+	private Model model;
+	private Vector lSpeed;
+	private double aSpeed;
 
 	// CONSTRUCTOR
 	public Entity(String name) {
@@ -43,8 +47,7 @@ public class Entity {
 		this.step = this.isu.new Dimension(Game.cmPerCell, Game.cmPerCell);
 		this.bounding = new Bounding();
 		this.occupied = new HashSet<Grid.Cell>();
-		this.updateBoundingBox();
-		
+//		this.updateBoundingBox();
 	}
 
 	// SETTER
@@ -63,13 +66,21 @@ public class Entity {
 	public void setSize(ISU.Dimension dimension) {
 		this.size = dimension;
 	}
-	
+
 	public void setStep(ISU.Dimension step) {
 		this.step = step;
 	}
-	
+
 	public void setBounding(Bounding bounding) {
 		this.bounding = bounding;
+	}
+
+	public void setStunt(Stunt stunt) {
+		this.stunt = stunt;
+	}
+	
+	public void setlSpeed(int xSpeed, int ySpeed) {
+		this.lSpeed = this.isu.new Vector(xSpeed, ySpeed);
 	}
 
 	// GETTER
@@ -84,19 +95,34 @@ public class Entity {
 	public int orientation() {
 		return this.orientation_degree;
 	}
-	
-	public ISU.Dimension step(){
+
+	public ISU.Dimension step() {
 		return this.step;
 	}
-	
+
 	public Bounding bounding() {
 		return this.bounding;
 	}
-	
+
+	public Vector lSpeed() {
+		return this.lSpeed;
+	}
+
+	public double aSpeed() {
+		return this.aSpeed;
+	}
+
+	public Stunt stunt() {
+		return this.stunt;
+	}
+
+	// BOUNDING BOX UPDATE
 	public void updateBoundingBox() {
-		double halfLongest = Math.max(this.size.x_cm/2.0, this.size.y_cm/2.0);
-		this.boundingBoxTopLeft = this.isu.new Coord(this.center.x_cm-halfLongest-1, this.center.y_cm-halfLongest-1);
-		this.boundingBoxBottomRight = this.isu.new Coord(this.center.x_cm+halfLongest+1, this.center.y_cm+halfLongest+1);
+		double halfLongest = Math.max(this.size.x_cm / 2.0, this.size.y_cm / 2.0);
+		this.boundingBoxTopLeft = this.isu.new Coord(this.center.x_cm - halfLongest - 1,
+				this.center.y_cm - halfLongest - 1);
+		this.boundingBoxBottomRight = this.isu.new Coord(this.center.x_cm + halfLongest + 1,
+				this.center.y_cm + halfLongest + 1);
 	}
 
 	// TRANSLATION
@@ -104,6 +130,7 @@ public class Entity {
 		retract();
 		this.position.translate(v);
 		this.center = this.position.toISUCoordCentered();
+		moveBoundings(v);
 		deploy();
 	}
 
@@ -112,7 +139,20 @@ public class Entity {
 		this.center.x_cm = this.isu.xAxis.normalize(this.center.x_cm + v.targetX_cm);
 		this.center.y_cm = this.isu.yAxis.normalize(this.center.y_cm + v.targetY_cm);
 		this.position = this.center.toGridPosition();
+		moveBoundings(v);
 		deploy();
+	}
+	
+	private void moveBoundings(Grid.Vector v) {
+		for (iShape shape : this.bounding.boundings()) {
+			shape.translate(v.dx, v.dy);
+		}
+	}
+	
+	private void moveBoundings(ISU.Vector v) {
+		for (iShape shape : this.bounding.boundings()) {
+			shape.translate(v);
+		}
 	}
 
 	// TURN
@@ -146,22 +186,22 @@ public class Entity {
 	 * @param nStep
 	 */
 	public void moveNorth(int nStep) {
-		ISU.Vector v = this.isu.new Vector(0, -nStep*this.step.y_cm);
+		ISU.Vector v = this.isu.new Vector(0, -nStep * this.step.y_cm);
 		this.translate(v);
 	}
 
 	public void moveSouth(int nStep) {
-		ISU.Vector v = this.isu.new Vector(0, nStep*this.step.y_cm);
+		ISU.Vector v = this.isu.new Vector(0, nStep * this.step.y_cm);
 		this.translate(v);
 	}
-	
+
 	public void moveEast(int nStep) {
-		ISU.Vector v = this.isu.new Vector(nStep*this.step.x_cm, 0);
+		ISU.Vector v = this.isu.new Vector(nStep * this.step.x_cm, 0);
 		this.translate(v);
 	}
 
 	public void moveWest(int nStep) {
-		ISU.Vector v = this.isu.new Vector(-nStep*this.step.y_cm, 0);
+		ISU.Vector v = this.isu.new Vector(-nStep * this.step.y_cm, 0);
 		this.translate(v);
 	}
 
@@ -178,7 +218,7 @@ public class Entity {
 		ISU.Vector v = this.isu.new Vector(0.0, length_cm);
 		this.translate(v);
 	}
-	
+
 	public void moveEast(double length_cm) {
 		ISU.Vector v = this.isu.new Vector(length_cm, 0.0);
 		this.translate(v);
@@ -195,18 +235,31 @@ public class Entity {
 			return false;
 		return this.bounding.intersects(e.bounding());
 	}
-	
+
+	// COLLISIONS
+	public void collision(Entity e) {
+
+	}
+
+	public void collision(List<Entity> le) {
+
+	}
+
+	public boolean haslSpeed() {
+		return this.lSpeed != null && (this.lSpeed.targetX_cm != 0 || this.lSpeed.targetY_cm != 0);
+	}
+
 	public void deploy() {
 		if (this.position != null) {
-			double halfLongest = Math.max(this.size.x_cm/2.0, this.size.y_cm/2.0);
-			int xmin = ((int) Math.round((this.center.x_cm-halfLongest) / Game.cmPerCell))-1;
-			int ymin = ((int) Math.round((this.center.y_cm-halfLongest) / Game.cmPerCell))-1;
-			int xmax = ((int) Math.floor((this.center.x_cm+halfLongest - 1e-9) / Game.cmPerCell))+1;
-			int ymax = ((int) Math.floor((this.center.y_cm+halfLongest - 1e-9) / Game.cmPerCell))+1;
-			
-			for (int y=ymin; y<=ymax; y++) {
-				for (int x=xmin; x<=xmax; x++) {
-					Grid.Cell c = this.grid.cellAt(this.grid.new Position(this.grid.xAxis.normalize(x), this.grid.yAxis.normalize(y))); 
+			double halfLongest = Math.max(this.size.x_cm / 2.0, this.size.y_cm / 2.0);
+			int xmin = ((int) Math.round((this.center.x_cm - halfLongest) / Game.cmPerCell)) - 1;
+			int ymin = ((int) Math.round((this.center.y_cm - halfLongest) / Game.cmPerCell)) - 1;
+			int xmax = ((int) Math.floor((this.center.x_cm + halfLongest - 1e-9) / Game.cmPerCell)) + 1;
+			int ymax = ((int) Math.floor((this.center.y_cm + halfLongest - 1e-9) / Game.cmPerCell)) + 1;
+
+			for (int y = ymin; y <= ymax; y++) {
+				for (int x = xmin; x <= xmax; x++) {
+					Grid.Cell c = this.grid.cellAt(this.grid.new Position(this.grid.xAxis.normalize(x), this.grid.yAxis.normalize(y)));
 					c.add(this);
 					this.occupied.add(c);
 				}
@@ -214,14 +267,14 @@ public class Entity {
 		}
 		this.updateBoundingBox();
 	}
-	
+
 	public void occupy(Grid.Position position) {
 		retract();
 		this.position = position;
 		this.center = this.position.toISUCoordCentered();
 		deploy();
 	}
-	
+
 	public void retract() {
 		for (Grid.Cell c : this.occupied) {
 			c.remove(this);

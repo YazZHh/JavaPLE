@@ -10,4 +10,7 @@ public interface iShape {
 	
 	public void rotateAround(ISU.Coord c, int angle_degree);
 
+	public void translate(int dx, int dy);
+
+	public void translate(ISU.Vector v);
 }
