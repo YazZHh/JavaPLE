@@ -119,10 +119,8 @@ public class Entity {
 	// BOUNDING BOX UPDATE
 	public void updateBoundingBox() {
 		double halfLongest = Math.max(this.size.x_cm / 2.0, this.size.y_cm / 2.0);
-		this.boundingBoxTopLeft = this.isu.new Coord(this.center.x_cm - halfLongest - 1,
-				this.center.y_cm - halfLongest - 1);
-		this.boundingBoxBottomRight = this.isu.new Coord(this.center.x_cm + halfLongest + 1,
-				this.center.y_cm + halfLongest + 1);
+		this.boundingBoxTopLeft = this.isu.new Coord(this.center.x_cm-halfLongest-1, this.center.y_cm-halfLongest-1);
+		this.boundingBoxBottomRight = this.isu.new Coord(this.center.x_cm+halfLongest+1, this.center.y_cm+halfLongest+1);
 	}
 
 	// TRANSLATION
