@@ -82,6 +82,10 @@ public class Entity {
 	public void setlSpeed(int xSpeed, int ySpeed) {
 		this.lSpeed = this.isu.new Vector(xSpeed, ySpeed);
 	}
+	
+	public void setaSpeed(double aSpeed) {
+		this.aSpeed = aSpeed;
+	}
 
 	// GETTER
 	public ISU.Coord center() {
@@ -236,11 +240,11 @@ public class Entity {
 
 	// COLLISIONS
 	public void collision(Entity e) {
-
+		this.stunt.collision(e);
 	}
 
 	public void collision(List<Entity> le) {
-
+		this.stunt.collision(le);
 	}
 
 	public boolean haslSpeed() {

@@ -6,43 +6,20 @@ import java.util.List;
 import engine.Entity;
 import engine.Game;
 import engine.Grid;
+import engine.ISU;
+import engine.ISU.Vector;
 
 public class Model {
 	// FIELDS
-	Grid grid;
-	List<Entity> entities;
+	private Grid grid;
+	private List<Entity> entities;
 
 	// CONSTRUCTOR
 	public Model() {
 		this.grid = Game.game().grid;
 		this.entities = new ArrayList<Entity>();
-		initMap();
 	}
 	
-	public void initMap() {
-		
-		
-		PacMan pacman = new PacMan();
-		this.add(pacman);
-		pacman.occupy(this.grid.new Position(5, 5));
-		pacman.setBounding();
-		
-		Gum gum = new Gum();
-		this.add(gum);
-		gum.occupy(this.grid.new Position(5, 6));
-		gum.setBounding();
-
-		Ghost ghost = new Ghost();
-		this.add(ghost);
-		ghost.occupy(this.grid.new Position(2, 2));
-		ghost.setBounding();
-
-		Boss boss = new Boss();
-		this.add(boss);
-		boss.occupy(this.grid.new Position(8, 4));
-		boss.setBounding();
-	}
-
 	// ADD, REMOVE Entity
 	public void add(Entity e) {
 		this.entities.add(e);
@@ -50,5 +27,50 @@ public class Model {
 
 	public void remove(Entity e) {
 		this.entities.remove(e);
+	}
+	
+	// GETTER
+	public List<Entity> entities(){
+		return this.entities;
+	}
+	
+	public void tick(long elapsed) {
+		double seconds = elapsed/1000.0;
+		for (Entity entity : entities) {
+			ISU.Vector speedVector = entity.lSpeed();
+			double angularSpeed = entity.aSpeed();
+			
+			if (angularSpeed != 0) {
+		        entity.turn((int) (angularSpeed*seconds));
+		        List<Entity> collisions = this.getCollision(entity);
+		        if (!collisions.isEmpty()) {
+		        	entity.turn((int) -(angularSpeed*seconds));
+		        	entity.setaSpeed(0);
+		        	entity.collision(collisions);
+		        }
+			}
+			
+			if (entity.haslSpeed()) {
+				ISU.Coord oldPos = entity.center().mkCopy();
+				double moveX = speedVector.targetX_cm * seconds;
+		        double moveY = speedVector.targetY_cm * seconds;
+		        entity.translate(entity.isu.new Vector(moveX, moveY));
+		        List<Entity> collisions = this.getCollision(entity);
+		        if (!collisions.isEmpty()) {
+		        	entity.translate(entity.center().mkVectorToward(oldPos));
+		        	entity.setlSpeed(0, 0);	
+		        	entity.collision(collisions);
+		        }
+			}
+		}
+	}
+	
+	public List<Entity> getCollision(Entity e){
+		List<Entity> collisions = new ArrayList<Entity>();
+		for (Entity entity : this.entities) {
+			if (entity != e && entity.intersects(e))
+				collisions.add(entity);
+		}
+		return collisions;
 	}
 }
