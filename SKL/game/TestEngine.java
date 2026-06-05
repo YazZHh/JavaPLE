@@ -1,4 +1,3 @@
-// == MAIN ==
 package game;
 
 import engine.Game;
