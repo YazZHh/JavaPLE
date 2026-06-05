@@ -836,7 +836,7 @@ public class Main {
 	
 	@Test
 	public void test21() {
-		System.out.println("Test Physic - SuperBoundingBox & Swept AABB :");
+		System.out.println("Test de la Physique : SuperBoundingBox & Swept AABB avec PacMan et un Obstacle (avec et sans collision) :");
 		Game game = new Game(10, 10);
 		Model model = new Model();
 		Physic physic = new Physic(model);
@@ -847,7 +847,7 @@ public class Main {
 		pacman.setBounding();
 		model.add(pacman);
 
-		System.out.println("Test de la super bounding box sur 1 seconde");
+//		System.out.println("Test de la super bounding box sur 1 seconde");
 		Rect s_bb = physic.superBoundingBox(pacman, 1.0);
 		assertNotNull(s_bb, "La Super Bounding Box ne doit pas être nulle !");
 		assertEquals(2.775, s_bb.getHalfHeight(), 0.001);
@@ -862,7 +862,6 @@ public class Main {
 		double entryTime = physic.getCollisionEntryTime(pacman, wall, 2.0);
 		assertTrue(entryTime > 0.0 && entryTime < 1.0, "L'impact doit avoir lieu pendant le tick (entre 0 et 1) !");
 		
-
 		Ghost ghost = new Ghost();
 		ghost.setPosition(model.grid().new Position(6, 7));
 		model.add(ghost);
@@ -870,6 +869,37 @@ public class Main {
 		double clearTime = physic.getCollisionEntryTime(pacman, ghost, 2.0);
 		assertEquals(1.0, clearTime, 1e-9, "Pas de collision, entryTime doit renvoyer 1.0 !");
 		System.out.println("Test Physic : PASSED\n\n");
+	}
+	
+	@Test
+	public void test22() {
+		System.out.println("Test de non collision entre deux PacMan dont les trajectoires se croisent.");
+		Game game = new Game(10, 10);
+		Model model = new Model();
+		Physic physic = new Physic(model);
+
+		PacMan pacman1 = new PacMan();
+		pacman1.setPosition(model.grid().new Position(3, 5));
+		pacman1.setlSpeed(14.8, 7.4);
+		pacman1.setBounding();
+		model.add(pacman1);
+		Rect pacman1_sbb = physic.superBoundingBox(pacman1, 1.0);
+		assertNotNull(pacman1_sbb, "La Super Bounding Box de pacman1 ne doit pas être nulle !");
+		assertEquals(4.625, pacman1_sbb.getHalfHeight(), 0.001);
+		assertEquals(8.325, pacman1_sbb.getHalfWidth(), 0.001);
+		
+		PacMan pacman2 = new PacMan();
+		pacman2.setPosition(model.grid().new Position(6, 8));
+		pacman2.setlSpeed(3.7, -22.2);
+		pacman2.setBounding();
+		model.add(pacman2);
+		Rect pacman2_sbb = physic.superBoundingBox(pacman2, 1.0);
+		assertNotNull(pacman2_sbb, "La Super Bounding Box de pacman2 ne doit pas être nulle !");
+		assertEquals(12.025, pacman2_sbb.getHalfHeight(), 0.001);
+		assertEquals(2.775, pacman2_sbb.getHalfWidth(), 0.001);
+
+		List<Entity> collisions = physic.getCollisionsForMovement(pacman1, 1.0);
+		assertTrue(collisions.isEmpty(), "La SuperBoundingBox de pacman1 ne doit rencontrer aucune collision !");
 	}
 	
 }
