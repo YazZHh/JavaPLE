@@ -11,6 +11,7 @@ public class Obstacle extends Entity {
 		super("Obstacle");
 		this.setSize(this.isu.new Dimension(Game.cmPerCell, Game.cmPerCell));
 		this.setPosition(this.grid.new Position(x_ncell, y_ncell));
+		this.setlSpeed(0.0, 0.0);
 		this.setBounding();
 		this.occupy(this.position());
 	}

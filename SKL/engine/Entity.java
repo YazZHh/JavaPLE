@@ -53,10 +53,12 @@ public class Entity {
 	// SETTER
 	public void setPosition(Grid.Position position) {
 		this.position = position;
+		this.center = position.toISUCoordCentered() ;
 	}
 
 	public void setCoord(ISU.Coord center) {
 		this.center = center;
+		this.position = center.toGridPosition();
 	}
 
 	public void setSize(Grid.Dimension dimension) {
@@ -79,7 +81,7 @@ public class Entity {
 		this.stunt = stunt;
 	}
 	
-	public void setlSpeed(int xSpeed, int ySpeed) {
+	public void setlSpeed(double xSpeed, double ySpeed) {
 		this.lSpeed = this.isu.new Vector(xSpeed, ySpeed);
 	}
 	

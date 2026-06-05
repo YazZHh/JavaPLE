@@ -1,5 +1,8 @@
 package engine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import game.Model;
 
 public class Physic {
@@ -10,9 +13,80 @@ public class Physic {
 	}
 	
 	public Rect superBoundingBox(Entity e, double time) {
-		ISU.Coord center = e.isu.new Coord(e.center().x_cm+(e.lSpeed().targetX_cm*time)/2, e.center().y_cm+(e.lSpeed().targetY_cm*time)/2);
-		ISU.Dimension dimensions = e.isu.new Dimension(Math.abs(e.lSpeed().targetX_cm*time)+e.size.x_cm, Math.abs(e.lSpeed().targetY_cm*time)+e.size.y_cm);
-		Rect s_bb = new Rect(center, dimensions, 0);
-		return s_bb;
+		double moveX = e.lSpeed().targetX_cm * time;
+	    double moveY = e.lSpeed().targetY_cm * time;
+
+	    double centerX = e.center().x_cm + (moveX / 2.0);
+	    double centerY = e.center().y_cm + (moveY / 2.0);
+	    ISU.Coord center = e.isu.new Coord(centerX, centerY);
+
+	    double width = e.size.x_cm + Math.abs(moveX);
+	    double height = e.size.y_cm + Math.abs(moveY);
+	    ISU.Dimension dimensions = e.isu.new Dimension(width, height);
+
+	    Rect s_bb = new Rect(center, dimensions, 0);
+	    return s_bb;
+	}
+	
+	public double getCollisionEntryTime(Entity e, Entity other, double time) {
+		double moveX_e = e.lSpeed().targetX_cm * time;
+		double moveY_e = e.lSpeed().targetY_cm * time;
+		
+		double moveX_other = other.haslSpeed() ? other.lSpeed().targetX_cm * time : 0;
+		double moveY_other = other.haslSpeed() ? other.lSpeed().targetY_cm * time : 0;
+		
+		double vrelx = moveX_e - moveX_other;
+		double vrely = moveY_e - moveY_other;
+		
+		double xInvEntry, yInvEntry;
+		double xInvExit, yInvExit;
+
+		// Axe X
+		if (vrelx > 0) {
+			xInvEntry = other.center().x_cm - (other.size.x_cm / 2.0) - (e.center().x_cm + (e.size.x_cm / 2.0));
+			xInvExit = (other.center().x_cm + (other.size.x_cm / 2.0)) - (e.center().x_cm - (e.size.x_cm / 2.0));
+		} else {
+			xInvEntry = (other.center().x_cm + (other.size.x_cm / 2.0)) - (e.center().x_cm - (e.size.x_cm / 2.0));
+			xInvExit = other.center().x_cm - (other.size.x_cm / 2.0) - (e.center().x_cm + (e.size.x_cm / 2.0));
+		}
+		double txEntry = (vrelx == 0) ? Double.NEGATIVE_INFINITY : xInvEntry / vrelx;
+		double txExit = (vrelx == 0) ? Double.POSITIVE_INFINITY : xInvExit / vrelx;
+
+		// Axe Y
+		if (vrely > 0) {
+			yInvEntry = other.center().y_cm - (other.size.y_cm / 2.0) - (e.center().y_cm + (e.size.y_cm / 2.0));
+			yInvExit = (other.center().y_cm + (other.size.y_cm / 2.0)) - (e.center().y_cm - (e.size.y_cm / 2.0));
+		} else {
+			yInvEntry = (other.center().y_cm + (other.size.y_cm / 2.0)) - (e.center().y_cm - (e.size.y_cm / 2.0));
+			yInvExit = other.center().y_cm - (other.size.y_cm / 2.0) - (e.center().y_cm + (e.size.y_cm / 2.0));
+		}
+		double tyEntry = (vrely == 0) ? Double.NEGATIVE_INFINITY : yInvEntry / vrely;
+		double tyExit = (vrely == 0) ? Double.POSITIVE_INFINITY : yInvExit / vrely;
+
+		double entryTime = Math.max(txEntry, tyEntry);
+		double exitTime = Math.min(txExit, tyExit);
+
+		if (entryTime > exitTime || (txEntry < 0.0 && tyEntry < 0.0) || txEntry > 1.0 || tyEntry > 1.0)
+			return 1.0;
+
+		return entryTime;
+	}
+	
+	public List<Entity> getCollisionsForMovement(Entity e, double time) {
+		List<Entity> finalCollisions = new ArrayList<>();
+		Rect superBoxE = this.superBoundingBox(e, time);		
+		double minEntryTime = 1.0;
+
+		for (Entity other : this.model.entities()) {
+			if (other != e && superBoxE.intersects(this.superBoundingBox(other, time))) {
+				double collisionTime = this.getCollisionEntryTime(e, other, time);
+				if (collisionTime < 1.0) {
+					finalCollisions.add(other);
+					if (collisionTime < minEntryTime)
+						minEntryTime = collisionTime;
+				}
+			}
+		}
+		return finalCollisions;
 	}
 }

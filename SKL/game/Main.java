@@ -4,6 +4,7 @@ package game;
 import engine.Game;
 import engine.Grid;
 import engine.ISU;
+import engine.Physic;
 import engine.Rect;
 import engine.Grid.Position;
 import engine.Circle;
@@ -11,6 +12,8 @@ import engine.Entity;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.lang.reflect.Field;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -64,7 +67,6 @@ public class Main {
 		Grid.Position startPos = grid.new Position(1, 1);
 		pacman.setSize(grid.new Dimension(1, 1));
 		pacman.setPosition(startPos.copy());
-		pacman.setCoord(startPos.toISUCoordCentered());
 		pacman.deploy();
 		grid.cellAt(startPos).add(pacman);
 		
@@ -102,7 +104,6 @@ public class Main {
 		Grid.Position startPos = grid.new Position(0, 0);
 		pacman.setSize(grid.new Dimension(1, 1));
 		pacman.setPosition(startPos);
-		pacman.setCoord(startPos.toISUCoordCentered());
 		pacman.deploy();
 		grid.cellAt(startPos).add(pacman);
 		pacman.show(System.out);
@@ -160,7 +161,6 @@ public class Main {
 		Grid.Position topEdge = grid.new Position(1, 0);
 		pacman.setSize(grid.new Dimension(1, 1));
 		pacman.setPosition(topEdge);
-		pacman.setCoord(topEdge.toISUCoordCentered());
 		grid.cellAt(topEdge).add(pacman);
 		
 		System.out.println("Bouge de 1 case vers le Nord (sort par le haut)");
@@ -212,7 +212,6 @@ public class Main {
 		Grid.Position centerPos = grid.new Position(2, 2);
 		pacman.setSize(grid.new Dimension(1, 1));
 		pacman.setPosition(centerPos.copy());
-		pacman.setCoord(centerPos.toISUCoordCentered()); // (9.25, 9.25)
 		grid.cellAt(centerPos).add(pacman);
 		pacman.show(System.out);
 		System.out.println();
@@ -262,7 +261,6 @@ public class Main {
 		Grid.Position centerPos = grid.new Position(2, 2);
 		pacman.setSize(grid.new Dimension(1, 1));
 		pacman.setPosition(centerPos.copy());
-		pacman.setCoord(centerPos.toISUCoordCentered());
 		pacman.deploy();
 		grid.cellAt(centerPos).add(pacman);
 		pacman.show(System.out);
@@ -531,7 +529,6 @@ public class Main {
 		ISU.Coord c1 = isu.new Coord(3.7, 7.4);
 		c1.show(System.out);
 		
-		// Test equals sur Coord
 		assertTrue(c1.equals(c1));
 		assertTrue(c1.equals(isu.new Coord(3.7, 7.4)));
 		assertFalse(c1.equals(null));
@@ -677,9 +674,7 @@ public class Main {
 
 		Entity grosMonstre = new Entity("GrosMonstre");
 		grosMonstre.setSize(game.isu.new Dimension(3*Game.cmPerCell, 2*Game.cmPerCell));
-		Grid.Position centreInitial = grid.new Position(2, 2);
-		grosMonstre.setPosition(centreInitial);
-		grosMonstre.setCoord(centreInitial.toISUCoordCentered());
+		grosMonstre.setCoord(grid.new Position(2, 2).toISUCoordCentered());
 		
 		System.out.println("Déploiement du monstre 3x2 centré en (2,2)...");
 		grosMonstre.deploy();
@@ -727,15 +722,11 @@ public class Main {
 
 		Entity petite = new Entity("Petite1x1");
 		petite.setSize(game.isu.new Dimension(1.0*Game.cmPerCell, 1.0*Game.cmPerCell));
-		Grid.Position posPetite = grid.new Position(1, 1);
-		petite.setPosition(posPetite);
-		petite.setCoord(posPetite.toISUCoordCentered());
+		petite.setPosition(grid.new Position(1, 1));
 
 		Entity grosse = new Entity("Grosse3x3");
 		grosse.setSize(game.isu.new Dimension(3.0*Game.cmPerCell, 3.0*Game.cmPerCell));
-		Grid.Position posGrosse = grid.new Position(4, 4);
-		grosse.setPosition(posGrosse);
-		grosse.setCoord(posGrosse.toISUCoordCentered());
+		grosse.setPosition(grid.new Position(4, 4));
 
 		System.out.println("Déploiement des deux entités...");
 		petite.deploy();
@@ -777,22 +768,22 @@ public class Main {
 		
 		PacMan pacman = new PacMan();
 		model.add(pacman);
-		pacman.occupy(model.grid.new Position(5, 5));
+		pacman.occupy(model.grid().new Position(5, 5));
 		pacman.setBounding();
 		
 		Gum gum = new Gum();
 		model.add(gum);
-		gum.occupy(model.grid.new Position(5, 6));
+		gum.occupy(model.grid().new Position(5, 6));
 		gum.setBounding();
 
 		Ghost ghost = new Ghost();
 		model.add(ghost);
-		ghost.occupy(model.grid.new Position(2, 2));
+		ghost.occupy(model.grid().new Position(2, 2));
 		ghost.setBounding();
 
 		Boss boss = new Boss();
 		model.add(boss);
-		boss.occupy(model.grid.new Position(8, 4));
+		boss.occupy(model.grid().new Position(8, 4));
 		boss.setBounding();
 		
 		pacman = null;
@@ -801,7 +792,7 @@ public class Main {
 		gum = null;
 		ghost = null;
 		
-		for (Entity e : model.entities) {
+		for (Entity e : model.entities()) {
 			if (e instanceof PacMan)
 				pacman = (PacMan) e;
 			if (e instanceof Boss)
@@ -820,7 +811,7 @@ public class Main {
 		assertNotNull(gum, "La Gum n'a pas été ajoutée au Model !");
 		assertNotNull(ghost, "Le Ghost n'a pas été ajouté au Model !");
 		
-		Grid.Position posObstacle = model.grid.new Position(0, 0);
+		Grid.Position posObstacle = model.grid().new Position(0, 0);
 		assertTrue(grid.cellAt(posObstacle).entities.stream().anyMatch(e -> e instanceof Obstacle), "L'obstacle n'est pas enregistré dans la case (0,0) de la grille !");
 		
 		assertNotNull(gum.position(), "La Gum doit avoir une position après occupy() !");
@@ -836,10 +827,49 @@ public class Main {
 		};
 		
 		for (int[] cell : expectedCells) {
-			Grid.Position p = model.grid.new Position(cell[0], cell[1]);
+			Grid.Position p = model.grid().new Position(cell[0], cell[1]);
 			assertTrue(grid.cellAt(p).entities.contains(boss), "Le Boss en T devrait occuper la case (" + cell[0] + "," + cell[1] + ") !");
 		}
 		
 		System.out.println("Test20 : PASSED\n\n");
 	}
+	
+	@Test
+	public void test21() {
+		System.out.println("Test Physic - SuperBoundingBox & Swept AABB :");
+		Game game = new Game(10, 10);
+		Model model = new Model();
+		Physic physic = new Physic(model);
+
+		PacMan pacman = new PacMan();
+		pacman.setPosition(model.grid().new Position(1, 1));
+		pacman.setlSpeed(11.1, 3.7);
+		pacman.setBounding();
+		model.add(pacman);
+
+		System.out.println("Test de la super bounding box sur 1 seconde");
+		Rect s_bb = physic.superBoundingBox(pacman, 1.0);
+		assertNotNull(s_bb, "La Super Bounding Box ne doit pas être nulle !");
+		assertEquals(2.775, s_bb.getHalfHeight(), 0.001);
+		assertEquals(6.475, s_bb.getHalfWidth(), 0.001);
+		
+		Obstacle wall = new Obstacle(3, 2);
+		model.add(wall);
+
+		List<Entity> collisions = physic.getCollisionsForMovement(pacman, 1.0);
+		assertFalse(collisions.isEmpty(), "La SuperBox devrait détecter le mur sur la trajectoire !");
+
+		double entryTime = physic.getCollisionEntryTime(pacman, wall, 2.0);
+		assertTrue(entryTime > 0.0 && entryTime < 1.0, "L'impact doit avoir lieu pendant le tick (entre 0 et 1) !");
+		
+
+		Ghost ghost = new Ghost();
+		ghost.setPosition(model.grid().new Position(6, 7));
+		model.add(ghost);
+		
+		double clearTime = physic.getCollisionEntryTime(pacman, ghost, 2.0);
+		assertEquals(1.0, clearTime, 1e-9, "Pas de collision, entryTime doit renvoyer 1.0 !");
+		System.out.println("Test Physic : PASSED\n\n");
+	}
+	
 }

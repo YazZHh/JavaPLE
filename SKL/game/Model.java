@@ -8,16 +8,19 @@ import engine.Game;
 import engine.Grid;
 import engine.ISU;
 import engine.ISU.Vector;
+import engine.Physic;
 
 public class Model {
 	// FIELDS
 	private Grid grid;
 	private List<Entity> entities;
+	private Physic ps;
 
 	// CONSTRUCTOR
 	public Model() {
 		this.grid = Game.game().grid;
 		this.entities = new ArrayList<Entity>();
+		this.ps = new Physic(this);
 	}
 	
 	// ADD, REMOVE Entity
@@ -34,33 +37,39 @@ public class Model {
 		return this.entities;
 	}
 	
+	public Grid grid() {
+		return this.grid;
+	}
+	
 	public void tick(long elapsed) {
-		double seconds = elapsed/1000.0;
-		for (Entity entity : entities) {
+		double seconds = elapsed / 1000.0;
+		List<Entity> copyEntities = new ArrayList<>(this.entities);
+		
+		for (Entity entity : copyEntities) {
 			ISU.Vector speedVector = entity.lSpeed();
 			double angularSpeed = entity.aSpeed();
 			
 			if (angularSpeed != 0) {
-		        entity.turn((int) (angularSpeed*seconds));
-		        List<Entity> collisions = this.getCollision(entity);
-		        if (!collisions.isEmpty()) {
-		        	entity.turn((int) -(angularSpeed*seconds));
-		        	entity.setaSpeed(0);
-		        	entity.collision(collisions);
-		        }
+				entity.turn((int) (angularSpeed * seconds));
+				List<Entity> collisions = this.getCollision(entity);
+				if (!collisions.isEmpty()) {
+					entity.turn((int) -(angularSpeed * seconds));
+					entity.setaSpeed(0);
+					entity.collision(collisions);
+				}
 			}
 			
 			if (entity.haslSpeed()) {
-				ISU.Coord oldPos = entity.center().mkCopy();
-				double moveX = speedVector.targetX_cm * seconds;
-		        double moveY = speedVector.targetY_cm * seconds;
-		        entity.translate(entity.isu.new Vector(moveX, moveY));
-		        List<Entity> collisions = this.getCollision(entity);
-		        if (!collisions.isEmpty()) {
-		        	entity.translate(entity.center().mkVectorToward(oldPos));
-		        	entity.setlSpeed(0, 0);	
-		        	entity.collision(collisions);
-		        }
+				List<Entity> trueCollisions = this.ps.getCollisionsForMovement(entity, seconds);
+				
+				if (trueCollisions.isEmpty()) {
+					double moveX = speedVector.targetX_cm * seconds;
+					double moveY = speedVector.targetY_cm * seconds;
+					entity.translate(entity.isu.new Vector(moveX, moveY));
+				} else {
+					entity.setlSpeed(0, 0); 
+					entity.collision(trueCollisions);
+				}
 			}
 		}
 	}
