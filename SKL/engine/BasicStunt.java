@@ -39,7 +39,7 @@ public class BasicStunt extends Stunt{
 	}
 	
 	public void walk(int degree) {
-		// WIP
+		set(1, 0);	// WIP
 	}
 	
 }

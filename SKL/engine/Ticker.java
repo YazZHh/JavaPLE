@@ -10,13 +10,14 @@ public class Ticker implements Runnable {
 	private Task task;
 	private long time;
 	
-	public Ticker(Model model) {
+	public Ticker(Model model, Task task, int ms) {
 		long time = System.currentTimeMillis();
 		this.task = Runtime.newTask("Ticker");
 		this.model = model;
+		this.task = task;
 		this.task.post(()->{
 			run();
-		});
+		}, ms);
 	}
 
 	@Override
