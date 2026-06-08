@@ -23,7 +23,7 @@ public class Main implements Runnable {
 
 	public static void main(String[] args) {
 		Dimension d = new Dimension(640, 480);
-		Runtime.boot(d, new Main());
+		Runtime.boot(d, new Main(), true);
 	}
 
 	@Override
@@ -39,24 +39,20 @@ public class Main implements Runnable {
 		
 		PacMan pacman = new PacMan();
 		pacman.setPosition(model.grid().new Position(1, 1));
-//		Gum gum = new Gum();
-//		gum.setPosition(model.grid().new Position(1, 1));
+//		pacman.setBounding();
+//		pacman.setlSpeed(10, 0);
 		model.add(pacman);
-//		model.add(gum);
 		view.add(pacman.new PacManAvatar());
-//		view.add(gum.new GumAvatar());
-		
-		BasicStunt stunt = new BasicStunt(model, pacman);
-//		BasicStunt stunt2 = new BasicStunt(model,gum);
-		stunt.walk(0);
-		
+		BasicStunt PacManStunt = new BasicStunt(model, pacman);
+		PacManStunt.walk(0);
+
 		this.task.post(new Runnable() {
 			@Override
 			public void run() throws Exception {
 				canvas.repaint();
-				task.post(this, 50);
+				task.post(this, 30);
 			}
-		}, 50);
+		}, 30);
 			
 	}
 

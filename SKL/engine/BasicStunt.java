@@ -38,8 +38,11 @@ public class BasicStunt extends Stunt{
 		}
 	}
 	
-	public void walk(int degree) {
-		set(1, 0);	// WIP
+	public void walk(int degree) {;
+		double rad = Math.toRadians(degree);
+		double vx = Math.cos(rad);
+		double vy = Math.sin(rad); 
+		this.entity.setlSpeed(vx, vy);
 	}
 	
 }

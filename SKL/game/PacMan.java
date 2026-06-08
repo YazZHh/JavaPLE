@@ -30,17 +30,40 @@ public class PacMan extends Entity {
 		}
 
 		public void getSprites(Graphics g) {
-			this.sprites = new BufferedImage[3];
+			this.sprites = new BufferedImage[4][3];
 			BufferedImage imgSprites = g.load("sprites.png");
-			sprites[0] = imgSprites.getSubimage(3, 617, 61, 88);
-			sprites[1] = imgSprites.getSubimage(65, 617, 81, 88);
-			sprites[2] = imgSprites.getSubimage(153, 616, 89, 88);
+			
+			sprites[East][0] = imgSprites.getSubimage(1, 1, 13, 13);
+			sprites[East][1] = imgSprites.getSubimage(17, 1, 13, 13);
+			sprites[East][2] = imgSprites.getSubimage(33, 1, 13, 13);
+			
+			sprites[North][0] = imgSprites.getSubimage(1, 34, 13, 13);
+			sprites[North][1] = imgSprites.getSubimage(17, 34, 13, 13);
+			sprites[North][2] = imgSprites.getSubimage(33, 1, 13, 13);
+			
+			sprites[West][0] = imgSprites.getSubimage(1, 17, 13, 13);
+			sprites[West][1] = imgSprites.getSubimage(17, 17, 13, 13);
+			sprites[West][2] = imgSprites.getSubimage(33, 1, 13, 13);
+			
+			sprites[South][0] = imgSprites.getSubimage(1, 49, 13, 13);
+			sprites[South][1] = imgSprites.getSubimage(17, 49, 13, 13);
+			sprites[South][2] = imgSprites.getSubimage(33, 1, 13, 13);
 		}
 		
 		@Override
 		public void paint(Graphics g) {
-			getSprites(g);
-			g.drawImage(sprites[index], PacMan.this.position().x, PacMan.this.position().y);
+			if (this.sprites == null)
+				getSprites(g);
+			if (PacMan.this.lSpeed().targetX_cm > 0)
+				direction = East;
+			else if (PacMan.this.lSpeed().targetX_cm < 0)
+				direction = West;
+			else if (PacMan.this.lSpeed().targetY_cm > 0)
+				direction = South;
+			else if (PacMan.this.lSpeed().targetY_cm < 0)
+				direction = North;
+//			g.drawImage(sprites[direction][index], (int) (PacMan.this.center().x_cm*Game.cmPerCell), (int) (PacMan.this.center().y_cm*Game.cmPerCell));
+			g.drawImage(sprites[direction][index], this.toPixel(PacMan.this.center().x_cm), this.toPixel(PacMan.this.center().y_cm));
 			index++;
 			if (index > 2)
 				index = 0;
