@@ -76,12 +76,6 @@ public class Model {
 				}
 			}
 			
-//			if (entity instanceof PacMan) {
-//				PacManAvatar a = ((PacMan) entity).avatar();
-//				a.index++;
-//				if (a.index > 2)
-//					a.index = 0;
-//			}
 		}
 	}
 	

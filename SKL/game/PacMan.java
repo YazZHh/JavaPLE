@@ -23,7 +23,7 @@ public class PacMan extends Entity {
 
 	// === Task COLLISION ===
 	public void setBounding() {
-		this.bounding().add(new Circle(this.center(), Game.cmPerCell/4.0));
+		this.bounding().add(new Circle(this.center(), (Game.cmPerCell/4.0)*Main.windowScale));
 	}
 	
 	public PacManAvatar avatar() {
@@ -33,8 +33,8 @@ public class PacMan extends Entity {
 	public class PacManAvatar extends Avatar{
 		
 		public static final int spriteSize = 13;
-		
-		int index, indChg;
+				
+		private int index, indChg;
 
 		public PacManAvatar() {
 			super(PacMan.this);
@@ -77,8 +77,6 @@ public class PacMan extends Entity {
 		        direction = South;
 		    if (PacMan.this.lSpeed().targetY_cm < 0)
 		        direction = North;
-		    
-		    PacMan.this.show(System.out);
 		        
 		    int posX = this.toPixel(PacMan.this.center().x_cm - (PacMan.this.size.x() / 2.0));
 		    int posY = this.toPixel(PacMan.this.center().y_cm - (PacMan.this.size.y() / 2.0));

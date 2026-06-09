@@ -14,9 +14,7 @@ public abstract class Avatar {
 	public static final int North = 1;
 	public static final int West = 2;
 	public static final int South = 3;
-	
-	public static final int TileSize = 15;
-	
+
 	protected Entity e;
 	protected BufferedImage[][] sprites;
 	protected int direction;
