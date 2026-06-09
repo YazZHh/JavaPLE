@@ -9,6 +9,7 @@ import engine.Grid;
 import engine.ISU;
 import engine.ISU.Vector;
 import engine.Physic;
+import game.PacMan.PacManAvatar;
 
 public class Model {
 	// FIELDS
@@ -42,6 +43,9 @@ public class Model {
 	}
 	
 	public void tick(long elapsed) {
+		if (elapsed > 100) { 
+	        elapsed = 10;
+	    }
 		double seconds = elapsed / 1000.0;
 		List<Entity> copyEntities = new ArrayList<>(this.entities);
 		
@@ -71,6 +75,13 @@ public class Model {
 					entity.collision(trueCollisions);
 				}
 			}
+			
+//			if (entity instanceof PacMan) {
+//				PacManAvatar a = ((PacMan) entity).avatar();
+//				a.index++;
+//				if (a.index > 2)
+//					a.index = 0;
+//			}
 		}
 	}
 	

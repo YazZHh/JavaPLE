@@ -1,9 +1,11 @@
 package game;
 
 import engine.Entity;
+import engine.Game;
 import engine.ISU;
 import engine.ISU.Coord;
 import oop.graphics.BufferedImage;
+import oop.graphics.Canvas;
 import oop.graphics.Graphics;
 
 public abstract class Avatar {
@@ -29,7 +31,7 @@ public abstract class Avatar {
 	public abstract void paint(Graphics g);
 	
 	public int toPixel(double cm) {
-		return (int) (cm*TileSize);
+		return (int) (cm*Game.pixelPerCm);
 	}
 }
 

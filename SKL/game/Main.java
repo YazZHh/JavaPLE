@@ -20,15 +20,18 @@ public class Main implements Runnable {
 	Canvas canvas;
 	Task task;
 	List<Entity> entities;
+	public static final double windowScale = 2.0;
+	public static final int headerSize = 61;
+	
 
 	public static void main(String[] args) {
-		Dimension d = new Dimension(640, 480);
+		Dimension d = new Dimension((int) (224*windowScale), (int) (248*windowScale)+headerSize);
 		Runtime.boot(d, new Main(), true);
 	}
 
 	@Override
 	public void run() throws Exception {
-		Game game = new Game(10, 10);
+		Game game = new Game((int) (30*windowScale), (int) (35*windowScale));
 		this.task = Runtime.task();
 		this.canvas = (Canvas) this.task.find("canvas");
 		View view = new View(canvas);
@@ -39,20 +42,23 @@ public class Main implements Runnable {
 		
 		PacMan pacman = new PacMan();
 		pacman.setPosition(model.grid().new Position(1, 1));
-//		pacman.setBounding();
-//		pacman.setlSpeed(10, 0);
+		pacman.setBounding();
 		model.add(pacman);
 		view.add(pacman.new PacManAvatar());
 		BasicStunt PacManStunt = new BasicStunt(model, pacman);
 		PacManStunt.walk(0);
 
+		Controller ct = new Controller(PacManStunt);
+		KeyListener kl = new KeyListener(ct);
+		canvas.set(kl);
+		
 		this.task.post(new Runnable() {
 			@Override
 			public void run() throws Exception {
 				canvas.repaint();
-				task.post(this, 30);
+				task.post(this, 17);
 			}
-		}, 30);
+		}, 17);
 			
 	}
 

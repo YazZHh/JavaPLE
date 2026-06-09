@@ -4,6 +4,7 @@ import java.util.List;
 
 import engine.Grid.Cell;
 import game.Model;
+import game.PacMan;
 
 public class BasicStunt extends Stunt{
 
@@ -40,9 +41,10 @@ public class BasicStunt extends Stunt{
 	
 	public void walk(int degree) {;
 		double rad = Math.toRadians(degree);
-		double vx = Math.cos(rad);
-		double vy = Math.sin(rad); 
-		this.entity.setlSpeed(vx, vy);
+		this.set(degree);
+		double vx = Math.round(Math.cos(rad));
+		double vy = Math.round(Math.sin(rad)); 
+		this.entity.setlSpeed(vx*PacMan.PacManSpeed, vy*PacMan.PacManSpeed);
 	}
 	
 }

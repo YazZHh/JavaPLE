@@ -7,6 +7,7 @@ import engine.Game;
 import engine.Grid.Position;
 import engine.ISU.Dimension;
 import oop.graphics.BufferedImage;
+import oop.graphics.Canvas;
 import oop.graphics.Graphics;
 
 public class Gum extends Entity {
@@ -30,13 +31,13 @@ public class Gum extends Entity {
 
 		@Override
 		public void getSprites(Graphics g) {
-			this.sprites = new BufferedImage[1];
+			this.sprites = new BufferedImage[1][1];
 		}
 
 		@Override
 		public void paint(Graphics g) {
 			getSprites(g);
-			g.drawImage(sprites[0], Gum.this.position().x, Gum.this.position().y);
+			g.drawImage(sprites[0][0], Gum.this.position().x, Gum.this.position().y);
 		}
 		
 	}

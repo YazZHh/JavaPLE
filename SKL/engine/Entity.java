@@ -181,6 +181,9 @@ public class Entity {
 			ps.printf("Center: ");
 			this.center.show(ps);
 		}
+		if (this.lSpeed != null) {
+			ps.printf("lSpeed: targetX_cm = %f, targetY_cm = %f\n", this.lSpeed.targetX_cm, this.lSpeed.targetY_cm);
+		}
 		ps.printf("Orientation: %d°\n", this.orientation_degree);
 	}
 
