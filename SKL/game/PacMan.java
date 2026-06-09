@@ -18,7 +18,7 @@ public class PacMan extends Entity {
 	// CONSTRUCTOR
 	public PacMan() {
 		super("PacMan");
-		this.setSize(this.isu.new Dimension(Game.cmPerCell/2.0, Game.cmPerCell/2.0));
+		this.setSize(this.isu.new Dimension((Game.cmPerCell*1.85)*Main.windowScale, (Game.cmPerCell*1.85)*Main.windowScale));
 	}
 
 	// === Task COLLISION ===

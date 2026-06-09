@@ -65,8 +65,7 @@ public class Rect extends Shape implements iShape {
 
 		// CONSTRUCTOR
 		public RectCircleIntersection(Rect outer, Circle circle) {
-			this.outer = new Rect(outer.center.mkCopy(),
-					isu.new Dimension(outer.getHalfWidth() * 2, outer.getHalfHeight() * 2), outer.angle_degree);
+			this.outer = new Rect(outer.center.mkCopy(), isu.new Dimension(outer.getHalfWidth() * 2, outer.getHalfHeight() * 2), outer.angle_degree);
 			this.circle = new Circle(circle.center.mkCopy(), circle.getRadius());
 			remedy();
 		}

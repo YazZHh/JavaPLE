@@ -128,6 +128,11 @@ public class Entity {
 		this.boundingBoxTopLeft = this.isu.new Coord(this.center.x_cm-halfLongest-1, this.center.y_cm-halfLongest-1);
 		this.boundingBoxBottomRight = this.isu.new Coord(this.center.x_cm+halfLongest+1, this.center.y_cm+halfLongest+1);
 	}
+	
+	public Rect boundingBox() {
+		double longest = Math.max(this.size.x_cm, this.size.y_cm);
+		return new Rect(this.isu.new Coord(this.center.x_cm, this.center.y_cm), this.isu.new Dimension(longest+2.0, longest+2.0), 0);
+	}
 
 	// TRANSLATION
 	public void translate(Grid.Vector v) {

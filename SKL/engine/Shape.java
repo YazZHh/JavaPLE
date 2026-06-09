@@ -12,6 +12,10 @@ public abstract class Shape implements iShape {
 		this.isu = Game.game().isu;
 	}
 	
+	public ISU.Coord center(){
+		return this.center;
+	}
+	
 	// == INTERSECTION ==
 	public boolean intersects(iShape shape) {
 		return shape.intersects(this);

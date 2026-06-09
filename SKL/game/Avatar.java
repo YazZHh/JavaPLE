@@ -24,6 +24,10 @@ public abstract class Avatar {
 		this.direction = 0;
 	}
 	
+	public Entity entity() {
+		return this.e;
+	}
+	
 	public abstract void getSprites(Graphics g);
 	
 	public abstract void paint(Graphics g);

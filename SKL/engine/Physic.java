@@ -32,8 +32,15 @@ public class Physic {
 		double moveX_e = e.lSpeed().targetX_cm * time;
 		double moveY_e = e.lSpeed().targetY_cm * time;
 		
-		double moveX_other = other.haslSpeed() ? other.lSpeed().targetX_cm * time : 0;
-		double moveY_other = other.haslSpeed() ? other.lSpeed().targetY_cm * time : 0;
+		double moveX_other, moveY_other;
+
+		if (other.haslSpeed()) {
+		    moveX_other = other.lSpeed().targetX_cm * time;
+		    moveY_other = other.lSpeed().targetY_cm * time;
+		} else {
+		    moveX_other = 0;
+		    moveY_other = 0;
+		}
 		
 		double vrelx = moveX_e - moveX_other;
 		double vrely = moveY_e - moveY_other;
@@ -49,8 +56,15 @@ public class Physic {
 			xInvEntry = (other.center().x_cm + (other.size.x_cm / 2.0)) - (e.center().x_cm - (e.size.x_cm / 2.0));
 			xInvExit = other.center().x_cm - (other.size.x_cm / 2.0) - (e.center().x_cm + (e.size.x_cm / 2.0));
 		}
-		double txEntry = (vrelx == 0) ? Double.NEGATIVE_INFINITY : xInvEntry / vrelx;
-		double txExit = (vrelx == 0) ? Double.POSITIVE_INFINITY : xInvExit / vrelx;
+		
+		double txEntry, txExit;
+		if (vrelx == 0) {
+			txEntry = Double.NEGATIVE_INFINITY;
+			txExit = Double.POSITIVE_INFINITY;
+		} else {
+			txEntry = xInvEntry / vrelx;
+			txExit = xInvExit / vrelx;
+		}
 
 		// Axe Y
 		if (vrely > 0) {
@@ -60,8 +74,15 @@ public class Physic {
 			yInvEntry = (other.center().y_cm + (other.size.y_cm / 2.0)) - (e.center().y_cm - (e.size.y_cm / 2.0));
 			yInvExit = other.center().y_cm - (other.size.y_cm / 2.0) - (e.center().y_cm + (e.size.y_cm / 2.0));
 		}
-		double tyEntry = (vrely == 0) ? Double.NEGATIVE_INFINITY : yInvEntry / vrely;
-		double tyExit = (vrely == 0) ? Double.POSITIVE_INFINITY : yInvExit / vrely;
+		
+		double tyEntry = 0, tyExit = 0;
+		if (vrely == 0) {
+			txEntry = Double.NEGATIVE_INFINITY;
+			txExit = Double.POSITIVE_INFINITY;
+		} else {
+			tyEntry = yInvEntry / vrely;
+			tyExit = yInvExit / vrely;
+		}
 
 		double entryTime = Math.max(txEntry, tyEntry);
 		double exitTime = Math.min(txExit, tyExit);
@@ -87,6 +108,44 @@ public class Physic {
 				}
 			}
 		}
-		return finalCollisions;
+		return finalCollisions;		
+		
+//	    List<Entity> finalCollisions = new ArrayList<>();
+//	    Rect superBoxE = this.superBoundingBox(e, time);        
+//	    double minEntryTime = 1.0;
+//
+//	    for (Entity other : this.model.entities()) {
+//	        if (other != e && other.bounding().intersects(superBoxE)) {
+//	            double collisionTime = this.getCollisionEntryTime(e, other, time);
+//	            if (collisionTime >= 0.0 && collisionTime < 1.0) {
+//	                finalCollisions.add(other);
+//	                if (collisionTime < minEntryTime) {
+//	                    minEntryTime = collisionTime;
+//	                }
+//	            }
+//	        }
+//	    }
+//	    return finalCollisions;
+		
+//		List<Entity> collisions = new ArrayList<>();
+//	    
+//	    Rect superBox = superBoundingBox(e, time);
+//
+//	    for (Entity other : model.entities()) {
+//	        if (other == e)
+//	        	continue;
+//	        
+//	        if (!other.bounding().intersects(superBox)) {
+//	            continue;
+//	        }
+//
+//	        double entryTime = getCollisionEntryTime(e, other, time);
+//	        
+//	        if (entryTime >= 0.0 && entryTime < 1.0) {
+//	            collisions.add(other);
+//	        }
+//	    }
+//	    return collisions;		
+		
 	}
 }

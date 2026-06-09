@@ -19,7 +19,7 @@ public class Ghost extends Entity {
 	// CONSTRUCTOR
 	public Ghost() {
 		super("Ghost");
-		this.setSize(this.isu.new Dimension(Game.cmPerCell/2.0, Game.cmPerCell/2.0));
+		this.setSize(this.isu.new Dimension((Game.cmPerCell*1.9)*Main.windowScale, (Game.cmPerCell*1.9)*Main.windowScale));
 	}
 
 	// === Task COLLISION ===
