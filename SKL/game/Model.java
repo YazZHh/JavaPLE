@@ -3,6 +3,7 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 
+import engine.BasicStunt;
 import engine.Entity;
 import engine.Game;
 import engine.Grid;
@@ -77,6 +78,10 @@ public class Model {
 					entity.translate(entity.isu.new Vector(moveX, moveY));
 				} else {
 					entity.setlSpeed(0, 0); 
+					if (entity.stunt() instanceof BasicStunt) {
+						BasicStunt bs = ((BasicStunt) entity.stunt());
+						bs.forbiddenDirection = bs.direction; 
+					}
 					entity.collision(trueCollisions);
 				}
 			}

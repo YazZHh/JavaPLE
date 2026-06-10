@@ -82,11 +82,14 @@ public class PacMan extends Entity {
 		    int posY = this.toPixel(PacMan.this.center().y_cm - (PacMan.this.size.y() / 2.0));
 		    g.drawImage(sprites[direction][index], posX, posY, (int) (spriteSize*Main.windowScale), (int) (spriteSize*Main.windowScale));
 		    
-		    if (indChg == 0)
+//		    System.out.printf("PacMan lspeed : x=%f, y=%f\n", PacMan.this.lSpeed().targetX_cm, PacMan.this.lSpeed().targetY_cm);
+		    
+		    if (indChg == 0 && PacMan.this.haslSpeed())
 		    	index++;
 		    if (index > 2)
 		    	index = 0;
-		    indChg++;
+		    if (PacMan.this.haslSpeed())
+		    	indChg++;
 		    if (indChg > 4)
 		    	indChg = 0;
 		}

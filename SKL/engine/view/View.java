@@ -32,8 +32,8 @@ public class View {
             g.drawRect((int)(boundingBox.center().x_cm-boundingBox.getHalfWidth()) * Game.pixelPerCm, 
                     (int)(boundingBox.center().y_cm - boundingBox.getHalfHeight()) * Game.pixelPerCm, 
                     (int)boundingBox.getHalfWidth()*2*Game.pixelPerCm, 
-                    (int)boundingBox.getHalfHeight()*2*Game.pixelPerCm);
-			a.paint(g);
+                    (int)boundingBox.getHalfHeight()*2*Game.pixelPerCm);			
+            a.paint(g);
 		}
 	}	
 }

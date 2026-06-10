@@ -41,23 +41,24 @@ public class Main implements Runnable {
 		Ticker ticker = new Ticker(model, tick, 10);
 		
 		PacMan pacman = new PacMan();
-		pacman.setPosition(model.grid().new Position((int) (1*windowScale), (int) (1*windowScale)));
+//		pacman.setPosition(model.grid().new Position((int) (1*windowScale), (int) (1*windowScale)));
+		pacman.setCoord(Game.game().isu.new Coord(Game.cmPerCell*windowScale, Game.cmPerCell*windowScale));
 		pacman.setBounding();
 		model.add(pacman);
 		view.add(pacman.new PacManAvatar());
 		BasicStunt PacManStunt = new BasicStunt(model, pacman);
 		pacman.setStunt(PacManStunt);
-		PacManStunt.walk(0);
+//		PacManStunt.walk(0);
 		
 		Ghost blinky = new Ghost();
 //		blinky.setPosition(model.grid().new Position((int) (16*windowScale), (int) (16*windowScale)));
-		blinky.setCoord(Game.game().isu.new Coord(30*windowScale*0.5, 35*windowScale*0.5));
+		blinky.setCoord(Game.game().isu.new Coord(30*Game.cmPerCell*windowScale*0.5, 35*Game.cmPerCell*windowScale*0.5));
 		blinky.setBounding();
 		model.add(blinky);
 		view.add(blinky.new GhostAvatar(0));
 		BasicStunt BlinkyStunt = new BasicStunt(model, blinky);
 		blinky.setStunt(BlinkyStunt);
-//		BlinkyStunt.walk(0);
+		BlinkyStunt.walk(0);
 
 		Controller ct = new Controller(PacManStunt);
 		KeyListener kl = new KeyListener(ct);

@@ -3,15 +3,31 @@ package engine;
 import java.util.List;
 
 import engine.Grid.Cell;
+import game.Avatar;
 import game.Model;
 import game.PacMan;
 
-public class BasicStunt extends Stunt{
+public class BasicStunt extends Stunt {
+	
+	public int forbiddenDirection;
+	public int direction;
 
 	public BasicStunt(Model model, Entity entity) {
 		super(model, entity);
+		forbiddenDirection = -1;
+		direction = Avatar.West;
 	}
 
+//	public
+//	
+//	public void setForbiddenDirection(int direction) {
+//		this.forbiddenDirection = direction;
+//	}
+//	
+//	public void setDirection(int direction) {
+//		this.direction = direction;
+//	}
+	
 	@Override
 	public void set(int orientation) {
 		this.entity.turn(orientation - this.entity.orientation());
