@@ -28,6 +28,7 @@ public class Entity {
 	private ISU.Coord center; // coordonnées en cm du centre de l'entité
 	private Bounding bounding;
 	private Set<Grid.Cell> occupied;
+	private engine.gal.Bot bot;
 	private ISU.Coord boundingBoxTopLeft;
 	private ISU.Coord boundingBoxBottomRight;
 	private int orientation_degree; // orientation par rapport à l'axe des x
@@ -47,6 +48,7 @@ public class Entity {
 		this.step = this.isu.new Dimension(Game.cmPerCell, Game.cmPerCell);
 		this.bounding = new Bounding();
 		this.occupied = new HashSet<Grid.Cell>();
+		this.lSpeed = this.isu.new Vector(0, 0);
 //		this.updateBoundingBox();
 	}
 
@@ -88,6 +90,10 @@ public class Entity {
 	public void setaSpeed(double aSpeed) {
 		this.aSpeed = aSpeed;
 	}
+	
+	public void setBot(engine.gal.Bot bot) {
+		this.bot = bot;
+	}
 
 	// GETTER
 	public ISU.Coord center() {
@@ -121,6 +127,10 @@ public class Entity {
 	public Stunt stunt() {
 		return this.stunt;
 	}
+	
+	public engine.gal.Bot bot(){
+		return this.bot;
+	}
 
 	// BOUNDING BOX UPDATE
 	public void updateBoundingBox() {
@@ -131,7 +141,7 @@ public class Entity {
 	
 	public Rect boundingBox() {
 		double longest = Math.max(this.size.x_cm, this.size.y_cm);
-		return new Rect(this.isu.new Coord(this.center.x_cm, this.center.y_cm), this.isu.new Dimension(longest+2.0, longest+2.0), 0);
+		return new Rect(this.isu.new Coord(this.center.x_cm, this.center.y_cm), this.isu.new Dimension(longest, longest), 0);
 	}
 
 	// TRANSLATION

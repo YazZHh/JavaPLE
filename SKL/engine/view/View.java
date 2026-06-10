@@ -35,6 +35,5 @@ public class View {
                     (int)boundingBox.getHalfHeight()*2*Game.pixelPerCm);
 			a.paint(g);
 		}
-	}
-	
+	}	
 }

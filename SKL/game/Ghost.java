@@ -19,7 +19,7 @@ public class Ghost extends Entity {
 	// CONSTRUCTOR
 	public Ghost() {
 		super("Ghost");
-		this.setSize(this.isu.new Dimension((Game.cmPerCell*1.9)*Main.windowScale, (Game.cmPerCell*1.9)*Main.windowScale));
+		this.setSize(this.isu.new Dimension((Game.cmPerCell*2)*Main.windowScale, (Game.cmPerCell*2)*Main.windowScale));
 	}
 
 	// === Task COLLISION ===
@@ -95,15 +95,18 @@ public class Ghost extends Entity {
 			if (this.sprites == null)
 		        getSprites(g);
 		        
-		    if (Ghost.this.lSpeed().targetX_cm > 0)
-		        direction = East;
-		    if (Ghost.this.lSpeed().targetX_cm < 0)
-		        direction = West;
-		    if (Ghost.this.lSpeed().targetY_cm > 0)
-		        direction = South;
-		    if (Ghost.this.lSpeed().targetY_cm < 0)
-		        direction = North;
-
+			if (!Ghost.this.haslSpeed())
+				direction = East;
+			else {
+				if (Ghost.this.lSpeed().targetX_cm > 0)
+					direction = East;
+				if (Ghost.this.lSpeed().targetX_cm < 0)
+			        direction = West;
+				if (Ghost.this.lSpeed().targetY_cm > 0)
+			        direction = South;
+				if (Ghost.this.lSpeed().targetY_cm < 0)
+			        direction = North;
+			}
 		    int posX = this.toPixel(Ghost.this.center().x_cm - (Ghost.this.size.x() / 2.0));
 		    int posY = this.toPixel(Ghost.this.center().y_cm - (Ghost.this.size.y() / 2.0));
 		    g.drawImage(sprites[direction][index], posX, posY, (int) (spriteSize*Main.windowScale), (int) (spriteSize*Main.windowScale));

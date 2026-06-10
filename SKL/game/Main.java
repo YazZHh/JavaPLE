@@ -20,7 +20,7 @@ public class Main implements Runnable {
 	Canvas canvas;
 	Task task;
 	List<Entity> entities;
-	public static final double windowScale = 2.0;
+	public static final double windowScale = 3.0;
 	public static final int headerSize = 61;
 	
 
@@ -50,13 +50,14 @@ public class Main implements Runnable {
 		PacManStunt.walk(0);
 		
 		Ghost blinky = new Ghost();
-		blinky.setPosition(model.grid().new Position((int) (16*windowScale), (int) (16*windowScale)));
+//		blinky.setPosition(model.grid().new Position((int) (16*windowScale), (int) (16*windowScale)));
+		blinky.setCoord(Game.game().isu.new Coord(30*windowScale*0.5, 35*windowScale*0.5));
 		blinky.setBounding();
 		model.add(blinky);
 		view.add(blinky.new GhostAvatar(0));
 		BasicStunt BlinkyStunt = new BasicStunt(model, blinky);
 		blinky.setStunt(BlinkyStunt);
-		BlinkyStunt.walk(0);
+//		BlinkyStunt.walk(0);
 
 		Controller ct = new Controller(PacManStunt);
 		KeyListener kl = new KeyListener(ct);
