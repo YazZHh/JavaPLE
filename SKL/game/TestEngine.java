@@ -4,9 +4,9 @@ import engine.Game;
 import engine.Grid;
 import engine.ISU;
 import engine.Physic;
-import engine.Rect;
 import engine.Grid.Position;
-import engine.Circle;
+import engine.shapes.Circle;
+import engine.shapes.Rect;
 import engine.Entity;
 
 import static org.junit.jupiter.api.Assertions.*;

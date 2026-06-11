@@ -1,10 +1,10 @@
 // == PAC MAN ==
 package game;
 
-import engine.Circle;
 import engine.Entity;
 import engine.Game;
 import engine.ISU.Dimension;
+import engine.shapes.Circle;
 import oop.graphics.BufferedImage;
 import oop.graphics.Canvas;
 import oop.graphics.Graphics;
@@ -18,7 +18,7 @@ public class PacMan extends Entity {
 	// CONSTRUCTOR
 	public PacMan() {
 		super("PacMan");
-		this.setSize(this.isu.new Dimension((Game.cmPerCell*1.85)*Main.windowScale, (Game.cmPerCell*1.85)*Main.windowScale));
+		this.setSize(this.isu.new Dimension((Game.cmPerCell*1.6)*Main.windowScale, (Game.cmPerCell*1.6)*Main.windowScale));
 	}
 
 	// === Task COLLISION ===
@@ -78,11 +78,9 @@ public class PacMan extends Entity {
 		    if (PacMan.this.lSpeed().targetY_cm < 0)
 		        direction = North;
 		        
-		    int posX = this.toPixel(PacMan.this.center().x_cm - (PacMan.this.size.x() / 2.0));
-		    int posY = this.toPixel(PacMan.this.center().y_cm - (PacMan.this.size.y() / 2.0));
+		    int posX = this.toPixel(PacMan.this.center().x_cm - (PacMan.this.size.x_cm / 1.8));
+		    int posY = this.toPixel(PacMan.this.center().y_cm - (PacMan.this.size.y_cm / 1.8));
 		    g.drawImage(sprites[direction][index], posX, posY, (int) (spriteSize*Main.windowScale), (int) (spriteSize*Main.windowScale));
-		    
-//		    System.out.printf("PacMan lspeed : x=%f, y=%f\n", PacMan.this.lSpeed().targetX_cm, PacMan.this.lSpeed().targetY_cm);
 		    
 		    if (indChg == 0 && PacMan.this.haslSpeed())
 		    	index++;

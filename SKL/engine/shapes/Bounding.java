@@ -1,8 +1,10 @@
 // = BOUNDING =
-package engine;
+package engine.shapes;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import engine.ISU;
 
 public class Bounding {
 

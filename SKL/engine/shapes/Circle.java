@@ -1,8 +1,9 @@
 // = Circle =
-package engine;
+package engine.shapes;
 
+import engine.ISU;
 import engine.ISU.Coord;
-import engine.Rect.RectCircleIntersection;
+import engine.shapes.Rect.RectCircleIntersection;
 
 public class Circle extends Shape implements iShape {
 

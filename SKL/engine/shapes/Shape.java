@@ -1,4 +1,9 @@
-package engine;
+package engine.shapes;
+
+import engine.Game;
+import engine.ISU;
+import engine.ISU.Coord;
+import engine.ISU.Vector;
 
 public abstract class Shape implements iShape {
 

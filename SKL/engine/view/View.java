@@ -5,7 +5,7 @@ import java.util.List;
 
 import engine.Entity;
 import engine.Game;
-import engine.Rect;
+import engine.shapes.Rect;
 import game.Avatar;
 import oop.graphics.Canvas;
 import oop.graphics.Graphics;

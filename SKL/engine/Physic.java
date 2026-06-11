@@ -3,6 +3,7 @@ package engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import engine.shapes.Rect;
 import game.Model;
 
 public class Physic {

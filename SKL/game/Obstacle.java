@@ -2,9 +2,13 @@ package game;
 
 import engine.Entity;
 import engine.Game;
-import engine.Rect;
+import engine.shapes.Rect;
+import game.PacMan.PacManAvatar;
+import oop.graphics.Graphics;
 
 public class Obstacle extends Entity {
+
+	private ObstacleAvatar self;
 
 	// CONSTRUCTOR
 	public Obstacle(int x_ncell, int y_ncell) {
@@ -19,6 +23,21 @@ public class Obstacle extends Entity {
 	// === Task COLLISION ===
 	public void setBounding() {
 		this.bounding().add(new Rect(this.center(), this.size, this.orientation()));
+	}
+	
+	public class ObstacleAvatar extends Avatar {
+
+		public ObstacleAvatar() {
+			super(Obstacle.this);
+			Obstacle.this.self = this;
+		}
+
+		@Override
+		public void getSprites(Graphics g) {}
+
+		@Override
+		public void paint(Graphics g) {}
+		
 	}
 
 }
