@@ -4,7 +4,7 @@ package game;
 import engine.Entity;
 import engine.Game;
 import engine.ISU.Dimension;
-import engine.Rect;
+import engine.shapes.Rect;
 
 /**
  * @implNote Le Boss a la forme d'un `t`

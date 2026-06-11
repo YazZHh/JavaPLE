@@ -1,12 +1,12 @@
 // == GHOST ==
 package game;
 
-import engine.Circle;
 import engine.Entity;
 import engine.Game;
 import engine.ISU.Dimension;
+import engine.shapes.Circle;
+import engine.shapes.Rect;
 import game.PacMan.PacManAvatar;
-import engine.Rect;
 import oop.graphics.BufferedImage;
 import oop.graphics.Graphics;
 

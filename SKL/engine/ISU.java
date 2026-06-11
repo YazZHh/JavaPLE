@@ -28,7 +28,8 @@ public class ISU {
 
 	// == DIMENSION (cm) ==
 	public class Dimension {
-		double x_cm, y_cm;
+		public double x_cm;
+		public double y_cm;
 
 		// CONSTRUCTOR
 		public Dimension(double x_cm, double y_cm) {
@@ -45,7 +46,6 @@ public class ISU {
 		}
 		
 		// SETTER
-
 		public void setxy(double x_cm, double y_cm) {
 			this.x_cm = x_cm;
 			this.y_cm = y_cm;

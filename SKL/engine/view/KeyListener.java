@@ -1,4 +1,4 @@
-package game;
+package engine.view;
 
 import oop.graphics.Canvas;
 import oop.graphics.VirtualKeyCodes;

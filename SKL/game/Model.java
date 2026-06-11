@@ -11,9 +11,8 @@ import engine.ISU;
 import engine.ISU.Coord;
 import engine.ISU.Dimension;
 import engine.ISU.Vector;
+import engine.shapes.Rect;
 import engine.Physic;
-//import engine.Physic;
-import engine.Rect;
 import game.PacMan.PacManAvatar;
 
 public class Model {
@@ -80,7 +79,13 @@ public class Model {
 					entity.setlSpeed(0, 0); 
 					if (entity.stunt() instanceof BasicStunt) {
 						BasicStunt bs = ((BasicStunt) entity.stunt());
-						bs.forbiddenDirection = bs.direction; 
+						bs.forbiddenDirection = bs.direction;
+						switch (bs.direction) {
+						case Avatar.West: bs.set(0.05*Main.windowScale, 0); break;
+						case Avatar.North: bs.set(0, 0.05*Main.windowScale); break;
+						case Avatar.East: bs.set(-0.05*Main.windowScale, 0); break;
+						default: bs.set(0, -0.05*Main.windowScale); break;
+						}
 					}
 					entity.collision(trueCollisions);
 				}

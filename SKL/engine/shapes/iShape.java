@@ -1,4 +1,8 @@
-package engine;
+package engine.shapes;
+
+import engine.ISU;
+import engine.ISU.Coord;
+import engine.ISU.Vector;
 
 public interface iShape {
 

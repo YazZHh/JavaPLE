@@ -1,11 +1,11 @@
 // == GUM ==
 package game;
 
-import engine.Circle;
 import engine.Entity;
 import engine.Game;
 import engine.Grid.Position;
 import engine.ISU.Dimension;
+import engine.shapes.Circle;
 import oop.graphics.BufferedImage;
 import oop.graphics.Canvas;
 import oop.graphics.Graphics;
